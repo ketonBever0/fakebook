@@ -1,5 +1,10 @@
--- Teljes adatbázist generáló szkript a truevoly/oracle-12c Docker képfájlhoz (másik 12c verzióval is működhet)
--- A "CREATE INDEX" parancsokat kivettem, mert egyébként is létrejönnek, emiatt hibát dobnak
+-- Teljes adatbázist generáló szkript a truevoly/oracle-12c Docker képfájlhoz (egyéb Oracle 12c-t futtató képfájllal/szerverrel is működhet)
+-- A futtatáshoz rendelkezzünk felhasználó készítését és sémájuk szerkesztését biztosító vagy DBA jogosultsággal ("sys" fiók megteszi)
+-- A "CREATE INDEX" parancsokat kivettem, mert a táblával együtt egyébként is létrejönnek, emiatt hibát dobtak, miszerint léteznek
+
+-- A táblák létrehozás után feltöltődnek adatokkal
+-- Az ID- és bizonyos dátum mezők szándékosan vannak kihagyva demonstrálva a szekvenciák és a SYSDATE megfelelő működését
+
 
 -- DROP USER FAKEBOOK CASCADE;
 -- ^ Ha újra akarod generálni a sémát vedd ki a kommentet a fenti sorból
@@ -281,3 +286,166 @@ ALTER TABLE "FAKEBOOK"."USER_INTERESTS" ADD CONSTRAINT "USER_INTERESTS_INTERESTS
 	  REFERENCES "FAKEBOOK"."INTERESTS" ("ID") ON DELETE CASCADE ENABLE;
   ALTER TABLE "FAKEBOOK"."USER_INTERESTS" ADD CONSTRAINT "USER_INTERESTS_USERS_FK" FOREIGN KEY ("USER_ID")
 	  REFERENCES "FAKEBOOK"."USERS" ("ID") ON DELETE CASCADE ENABLE;
+
+
+-- Táblák feltöltése adatokkal
+
+-- USERS
+INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
+VALUES ('johndoe@example.com', 'John Doe', 'password123', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'FakeBook Inc.', 'http://example.com/johndoe.jpg');
+
+INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
+VALUES ('janedoe@example.com', 'Jane Doe', 'password456', TO_DATE('1992-08-21', 'YYYY-MM-DD'), 'FakeBook Ltd.', 'http://example.com/janedoe.jpg');
+
+INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
+VALUES ('alexsmith@example.com', 'Alex Smith', 'securePass789', TO_DATE('1985-11-10', 'YYYY-MM-DD'), 'Tech Inc.', NULL);
+
+INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
+VALUES ('emilyjones@example.com', 'Emily Jones', 'mypassword111', TO_DATE('1993-03-02', 'YYYY-MM-DD'), 'Creative Solutions', NULL);
+
+INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
+VALUES ('michaelbrown@example.com', 'Michael Brown', 'passwordABC123', TO_DATE('1989-07-19', 'YYYY-MM-DD'), 'Innovative Co.', NULL);
+
+-- POSTS
+INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
+VALUES ('This is my first post!', 'http://example.com/image1.jpg', 1);
+
+INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
+VALUES ('Check out this cool picture!', NULL, 2);
+
+INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
+VALUES ('Had a great day at the beach!', 'http://example.com/image3.jpg', 3);
+
+INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
+VALUES ('Just finished a great book!', 'http://example.com/image4.jpg', 4);
+
+INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
+VALUES ('Started learning a new programming language!', NULL, 5);
+
+-- COMMENTS
+INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
+VALUES ('Great post!', 2, 1);
+
+INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
+VALUES ('Nice picture!', 1, 2);
+
+INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
+VALUES ('Looks like a fun day!', 3, 3);
+
+INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
+VALUES ('I also loved that book!', 4, 4);
+
+INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
+VALUES ('Good luck with your coding journey!', 5, 5);
+
+-- FRIENDS
+INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
+VALUES (1, 1, 2);
+
+INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
+VALUES (0, 2, 1);
+
+INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
+VALUES (1, 3, 4);
+
+INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
+VALUES (0, 4, 3);
+
+INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
+VALUES (1, 5, 1);
+
+-- GROUPS
+INSERT INTO FAKEBOOK.GROUPS (NAME)
+VALUES ('Tech Enthusiasts');
+
+INSERT INTO FAKEBOOK.GROUPS (NAME)
+VALUES ('Book Lovers');
+
+INSERT INTO FAKEBOOK.GROUPS (NAME)
+VALUES ('Music Fans');
+
+INSERT INTO FAKEBOOK.GROUPS (NAME)
+VALUES ('Travel Addicts');
+
+INSERT INTO FAKEBOOK.GROUPS (NAME)
+VALUES ('Cooking Lovers');
+
+-- GROUP_MESSAGES
+INSERT INTO FAKEBOOK.GROUP_MESSAGES (TEXT, GROUP_ID, SENDER_ID)
+VALUES ('Hello group!', 1, 1);
+
+INSERT INTO FAKEBOOK.GROUP_MESSAGES (TEXT, GROUP_ID, SENDER_ID)
+VALUES ('What''s up everyone?', 2, 2);
+
+INSERT INTO FAKEBOOK.GROUP_MESSAGES (TEXT, GROUP_ID, SENDER_ID)
+VALUES ('Anyone here a fan of rock music?', 3, 3);
+
+INSERT INTO FAKEBOOK.GROUP_MESSAGES (TEXT, GROUP_ID, SENDER_ID)
+VALUES ('I''m planning a trip to Italy!', 4, 4);
+
+INSERT INTO FAKEBOOK.GROUP_MESSAGES (TEXT, GROUP_ID, SENDER_ID)
+VALUES ('Does anyone have a good recipe for lasagna?', 5, 5);
+
+-- INTERESTS
+INSERT INTO FAKEBOOK.INTERESTS (NAME)
+VALUES ('Technology');
+
+INSERT INTO FAKEBOOK.INTERESTS (NAME)
+VALUES ('Reading');
+
+INSERT INTO FAKEBOOK.INTERESTS (NAME)
+VALUES ('Music');
+
+INSERT INTO FAKEBOOK.INTERESTS (NAME)
+VALUES ('Travel');
+
+INSERT INTO FAKEBOOK.INTERESTS (NAME)
+VALUES ('Cooking');
+
+-- MESSAGES
+INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
+VALUES ('Hey, how are you?', 1, 2);
+
+INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
+VALUES ('I''m doing well, thanks!', 2, 1);
+
+INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
+VALUES ('What time is our meeting tomorrow?', 3, 4);
+
+INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
+VALUES ('I finished the project! Check it out!', 4, 5);
+
+INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
+VALUES ('Can''t wait for our vacation together!', 5, 1);
+
+-- USER_GROUPS
+INSERT INTO FAKEBOOK.USER_GROUPS (USER_ID, GROUP_ID, PENDING, ROLE)
+VALUES (1, 1, 1, 'NORMAL');
+
+INSERT INTO FAKEBOOK.USER_GROUPS (USER_ID, GROUP_ID, PENDING, ROLE)
+VALUES (2, 2, 0, 'ADMIN');
+
+INSERT INTO FAKEBOOK.USER_GROUPS (USER_ID, GROUP_ID, PENDING, ROLE)
+VALUES (3, 3, 1, 'MODERATOR');
+
+INSERT INTO FAKEBOOK.USER_GROUPS (USER_ID, GROUP_ID, PENDING, ROLE)
+VALUES (4, 4, 0, 'NORMAL');
+
+INSERT INTO FAKEBOOK.USER_GROUPS (USER_ID, GROUP_ID, PENDING, ROLE)
+VALUES (5, 5, 0, 'NORMAL');
+
+-- USER_INTERESTS
+INSERT INTO FAKEBOOK.USER_INTERESTS (USER_ID, INTEREST_ID)
+VALUES (1, 1);
+
+INSERT INTO FAKEBOOK.USER_INTERESTS (USER_ID, INTEREST_ID)
+VALUES (2, 2);
+
+INSERT INTO FAKEBOOK.USER_INTERESTS (USER_ID, INTEREST_ID)
+VALUES (3, 3);
+
+INSERT INTO FAKEBOOK.USER_INTERESTS (USER_ID, INTEREST_ID)
+VALUES (4, 4);
+
+INSERT INTO FAKEBOOK.USER_INTERESTS (USER_ID, INTEREST_ID)
+VALUES (5, 5);
