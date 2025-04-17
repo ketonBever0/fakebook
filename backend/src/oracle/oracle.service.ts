@@ -1,28 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import oracledb from 'oracledb';
+import * as oracledb from 'oracledb';
 
 @Injectable()
 export class OracleService {
-  private readonly config: ConfigService;
+  pool: oracledb.Connection | null;
+  readonly jsonFormat = oracledb.OUT_FORMAT_OBJECT;
 
-  static pool: oracledb.Pool | null;
-
-  constructor() {
+  constructor(private readonly config: ConfigService) {
     this.connect();
   }
 
   async connect() {
-    try {
+    this.pool = await (
       await oracledb.createPool({
         user: this.config.get('DB_USER'),
         password: this.config.get('DB_PASSWORD'),
         connectString: this.config.get('DB_CONNECTION_STRING'),
+      })
+    )
+      .getConnection()
+      .then((res) => {
+        // console.log('OracleDB connection pool created successfully');
+        return res;
+      })
+      .catch((e) => {
+        console.error('Error creating OracleDB connection pool', e);
+        return null;
       });
-      console.log('OracleDB connection pool created successfully');
-    } catch (err) {
-      console.error('Error creating OracleDB connection pool', err);
-    }
   }
 
+  getDb() {
+    return oracledb;
+  }
 }
