@@ -1,0 +1,37 @@
+/* NavBar Styles */
+nav {
+    background-color: #304d6d;
+    color: #fdf0d5;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    background-color: #08bdbd;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.menu {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+nav a {
+    color: #fdf0d5;
+    text-decoration: none;
+    margin: 0 10px;
+    padding: 5px 10px;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #08bdbd; /* Verdigris */
+    color: #100c0b; /* Smoky Black */
+}
