@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Users.css"; // Import the updated CSS
+import "./Users.css";
 
 export default function Users() {
   type UserType = {
@@ -15,70 +15,32 @@ export default function Users() {
   };
 
   const [users, setUsers] = useState<UserType[]>([]);
-  const [formData, setFormData] = useState<UserType>({
-    id: 0,
+  const [formData, setFormData] = useState<Omit<UserType, "id" | "picture_url" | "registered_at" | "last_login"> & { password: string }>({
     email: "",
     fullname: "",
     birth_date: "",
     company: "",
-    picture_url: "",
-    registered_at: "",
-    last_login: "",
+    password: "",
   });
 
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<UserType | null>(null);
 
-
-  //Ez dummy adatokkal írja ki a tablazatot, mert backend nélkül ne látszik semmi!
-  //Viszont a gombok nem működnek!!!
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const dummyData = [
-          {
-            id: 1,
-            email: "john.doe@example.com",
-            fullname: "John Doe",
-            birth_date: "1990-01-01",
-            company: "Doe Enterprises",
-            picture_url: "",
-            registered_at: "2023-04-01",
-            last_login: "2023-04-10",
-          },
-          {
-            id: 2,
-            email: "jane.smith@example.com",
-            fullname: "Jane Smith",
-            birth_date: "1985-07-15",
-            company: "Smith Solutions",
-            picture_url: "",
-            registered_at: "2023-03-15",
-            last_login: "2023-04-05",
-          },
-        ];
-        setUsers(dummyData);
+        const res = await axios.get("http://localhost:3000/api/user/all");
+        console.log("Fetched users:", res.data);
+        setUsers(res.data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching users:", err);
+        alert("Failed to fetch users.");
       }
     };
     fetchUsers();
   }, []);
 
-  // //Ez a backendre kötött verzió
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const res = await axios.get("/api/users"); // Replace with the backend endpoint
-  //       setUsers(res.data);
-  //     } catch (err) {
-  //       console.error("Error fetching users:", err);
-  //     }
-  //   };
-  //   fetchUsers();
-  // }, []);
 
-// Handle input changes for adding or editing
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
       isEditing: boolean = false
@@ -100,36 +62,55 @@ export default function Users() {
     }
   };
 
-// Add a new user
   const addUser = async () => {
     try {
-      const res = await axios.post("/api/users", formData); // Replace with the backend endpoint
-      setUsers([...users, res.data]);
+      const res = await axios.post("http://localhost:3000/api/auth/register", {
+        email: formData.email,
+        fullname: formData.fullname,
+        password: formData.password,
+        birthDate: formData.birth_date,
+        company: formData.company,
+      });
+
+      alert(res.data.message);
+
+      const newUser: UserType = {
+        id: users.length + 1, // Ideiglenes ID
+        email: formData.email,
+        fullname: formData.fullname,
+        birth_date: formData.birth_date,
+        company: formData.company,
+        picture_url: "",
+        registered_at: "",
+        last_login: "",
+      };
+
+      setUsers((prevState) => [...prevState, newUser]);
       setFormData({
-        id: 0,
         email: "",
         fullname: "",
         birth_date: "",
         company: "",
-        picture_url: "",
-        registered_at: "",
-        last_login: "",
+        password: "",
       });
     } catch (err) {
       console.error("Error adding user:", err);
+      if (err.response && err.response.status === 400) {
+        alert(err.response.data.message.join(", "));
+      } else {
+        alert("Failed to register new user.");
+      }
     }
   };
 
-  // Start editing a user
   const startEditing = (user: UserType) => {
     setEditingUserId(user.id);
     setEditFormData({ ...user });
   };
 
-  // Save edited user
   const saveUser = () => {
     if (editFormData) {
-      axios.put(`/api/users/${editFormData.id}`, editFormData) // Replace with the backend endpoint
+      axios.put(`/api/users/${editFormData.id}`, editFormData)
           .then(() => {
             setUsers(users.map((user) =>
                 user.id === editFormData.id ? editFormData : user
@@ -140,15 +121,13 @@ export default function Users() {
     }
   };
 
-  // Cancel editing
   const cancelEditing = () => {
     setEditingUserId(null);
     setEditFormData(null);
   };
 
-  // Delete a user
   const deleteUser = (id: number) => {
-    axios.delete(`/api/users/${id}`) // Replace with the backend endpoint
+    axios.delete(`/api/users/${id}`)
         .then(() => setUsers(users.filter((user) => user.id !== id)))
         .catch((err) => console.error(err));
   };
@@ -164,16 +143,6 @@ export default function Users() {
               style={{marginBottom: "20px"}}
               className="form-container"
           >
-            <label htmlFor="id">ID</label>
-            <input
-                type="number"
-                id="id"
-                name="id"
-                className="new-user"
-                placeholder="ID"
-                value={formData.id || ""}
-                onChange={(e) => handleChange(e)}
-            />
             <label htmlFor="email">Email</label>
             <input
                 type="text"
@@ -192,6 +161,16 @@ export default function Users() {
                 className="new-user"
                 placeholder="Full Name"
                 value={formData.fullname || ""}
+                onChange={(e) => handleChange(e)}
+            />
+            <label htmlFor="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                className="new-user"
+                placeholder="Password"
+                value={formData.password || ""}
                 onChange={(e) => handleChange(e)}
             />
             <label htmlFor="birth_date">Birth Date</label>
@@ -213,42 +192,12 @@ export default function Users() {
                 value={formData.company || ""}
                 onChange={(e) => handleChange(e)}
             />
-            <label htmlFor="picture_url">Picture URL</label>
-            <input
-                type="text"
-                id="picture_url"
-                name="picture_url"
-                className="new-user"
-                placeholder="Picture URL"
-                value={formData.picture_url || ""}
-                onChange={(e) => handleChange(e)}
-            />
-            <label htmlFor="registered_at">Registered At</label>
-            <input
-                type="date"
-                id="registered_at"
-                name="registered_at"
-                className="new-user"
-                value={formData.registered_at || ""}
-                onChange={(e) => handleChange(e)}
-            />
-            <label htmlFor="last_login">Last Login</label>
-            <input
-                type="date"
-                id="last_login"
-                name="last_login"
-                className="new-user"
-                value={formData.last_login || ""}
-                onChange={(e) => handleChange(e)}
-            />
             <button className="save" onClick={addUser}>
               Add User
             </button>
           </form>
         </div>
 
-
-        {/* Table for listing users */}
         <div>
           <h2>All Users</h2>
           <table>
