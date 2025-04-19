@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
   Res,
@@ -27,6 +28,11 @@ export class AuthController {
   login(@Body() dto: LoginDto) {
     // return res.status(HttpStatus.OK).json(this.authService.login(dto));
     return this.authService.login(dto);
+  }
+
+  @Patch("password/:id")
+  createPassword(@Param("id") id: string, @Body() body: { password: string }) {
+    return this.authService.createPassword(parseInt(id), body.password)
   }
 
 }

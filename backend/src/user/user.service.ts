@@ -9,8 +9,8 @@ import { OracleService } from 'src/oracle/oracle.service';
 export class UserService {
   constructor(private readonly db: OracleService) {}
 
-  getOneUser(id: number) {
-    return this.db.pool
+  async getOneUser(id: number) {
+    const res = await this.db.pool
       .execute(
         `
       SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", BIRTH_DATE AS "birthDate", COMPANY AS "company", ROLE AS "role"
@@ -18,24 +18,20 @@ export class UserService {
       WHERE id = :id
       `,
         { id: id },
-        this.db.jsonFormat,
-      )
-      .then((res) => {
-        if (res.rows.length > 0) return res.rows[0];
-        else throw new NotFoundException('User not found!');
-      });
+        this.db.jsonFormat);
+    if (res.rows.length > 0) return res.rows[0];
+    else throw new NotFoundException('User not found!');
   }
 
-  getAllUsers() {
-    return this.db.pool
+  async getAllUsers() {
+    const res = await this.db.pool
       .execute(
         `
       SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", BIRTH_DATE AS "birthDate", COMPANY AS "company", ROLE AS "role"
       FROM USERS
       `,
         {},
-        this.db.jsonFormat,
-      )
-      .then((res) => res.rows);
+        this.db.jsonFormat);
+    return res.rows;
   }
 }

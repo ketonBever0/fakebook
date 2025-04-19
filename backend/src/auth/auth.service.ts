@@ -38,6 +38,39 @@ export class AuthService {
     );
   }
 
+  async register(dto: RegisterDto) {
+    const hash = await argon.hash(dto.password);
+
+    return await this.db.pool
+      .execute(
+        `
+        INSERT INTO USERS
+          (EMAIL, fullname, PASSWORD, BIRTH_DATE, COMPANY)
+          VALUES(:email, :fullname, :password, TO_DATE(:birthDate, 'yyyy-mm-dd'), :company)
+      `,
+        {
+          email: dto.email,
+          fullname: dto.fullname,
+          password: hash,
+          birthDate: dto.birthDate,
+          company: dto.company,
+        },
+        { autoCommit: true },
+      )
+      .then((res) => {
+        if (res.rowsAffected == 1) {
+          return { message: 'Register successful! Now login.' };
+        }
+      })
+      .catch((e: Error) => {
+        if (e.message.includes('USERS_EMAIL_UNIQUE')) {
+          throw new BadRequestException(
+            'E-mail address is already registered.',
+          );
+        }
+      });
+  }
+
   async login(dto: LoginDto) {
     const user: any = await this.db.pool
       .execute(
@@ -62,34 +95,30 @@ export class AuthService {
     }
   }
 
-  async register(dto: RegisterDto) {
-    const hash = await argon.hash(dto.password);
-
+  async createPassword(id: number, password: string) {
+    const hash = await argon.hash(password);
     return await this.db.pool
       .execute(
         `
-        INSERT INTO USERS
-          (EMAIL, fullname, PASSWORD, BIRTH_DATE, COMPANY)
-          VALUES(:email, :fullname, :password, TO_DATE(:birthDate, 'yyyy-mm-dd'), :company)
+        UPDATE USERS SET PASSWORD = :password
+        WHERE ID = :id
       `,
-        {
-          email: dto.email,
-          fullname: dto.fullname,
-          password: hash,
-          birthDate: dto.birthDate,
-          company: dto.company,
-        },
-        { autoCommit: true },
+        { password: hash, id: id },
+        this.db.autoCommit,
       )
-      .then((res) => {
-        return res.rowsAffected;
-      })
-      .catch((e: Error) => {
-        if (e.message.includes('USERS_EMAIL_UNIQUE')) {
-          throw new BadRequestException(
-            'E-mail address is already registered.',
-          );
-        }
+      .then(async (res) => {
+        const user: { email: string } = await this.db.pool
+          .execute(
+            `
+          SELECT EMAIL AS "email" FROM USERS WHERE ID = :id
+          `,
+            { id: id },
+            this.db.jsonFormat,
+          )
+          .then((res) => res.rows[0] as { email: string });
+        if (user)
+          return { message: `Password created for ${user.email}.` };
+        else throw new NotFoundException('User not found!');
       });
   }
 }

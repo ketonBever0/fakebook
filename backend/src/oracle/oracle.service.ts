@@ -6,6 +6,7 @@ import * as oracledb from 'oracledb';
 export class OracleService {
   pool: oracledb.Connection | null;
   readonly jsonFormat = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+  readonly autoCommit = { autoCommit: true };
 
   constructor(private readonly config: ConfigService) {
     this.connect();
