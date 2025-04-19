@@ -2,8 +2,10 @@ import * as argon from 'argon2';
 
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
@@ -64,8 +66,12 @@ export class AuthService {
       })
       .catch((e: Error) => {
         if (e.message.includes('USERS_EMAIL_UNIQUE')) {
-          throw new BadRequestException(
-            'E-mail address is already registered.',
+          throw new ConflictException('E-mail address is already registered.');
+        }
+
+        if (e.message.includes('FORBIDDEN_EXPRESSION')) {
+          throw new NotAcceptableException(
+            'Obscene expression found in fullname!',
           );
         }
       });
@@ -116,8 +122,7 @@ export class AuthService {
             this.db.jsonFormat,
           )
           .then((res) => res.rows[0] as { email: string });
-        if (user)
-          return { message: `Password created for ${user.email}.` };
+        if (user) return { message: `Password created for ${user.email}.` };
         else throw new NotFoundException('User not found!');
       });
   }

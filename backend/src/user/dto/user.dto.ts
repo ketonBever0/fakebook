@@ -1,21 +1,13 @@
 import {
+  Equals,
   IsDateString,
   IsEmail,
+  IsIn,
   IsNotEmpty,
   IsString,
-  IsStrongPassword,
 } from 'class-validator';
 
-export class LoginDto {
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  password: string;
-}
-
-export class RegisterDto {
+export class UpdateUserDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
@@ -25,14 +17,16 @@ export class RegisterDto {
   fullname: string;
 
   @IsNotEmpty()
-  @IsStrongPassword()
-  password: string;
-
-  @IsNotEmpty()
   @IsDateString()
   birthDate: string;
 
   @IsNotEmpty()
   @IsString()
   company: string;
+
+  @IsNotEmpty()
+  @IsIn(['NORMAL', 'MODERATOR', 'ADMIN'], {
+    message: 'Role must be NORMAL, MODERATOR or ADMIN!',
+  })
+  role: string;
 }

@@ -2,20 +2,31 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
+import { UpdateUserDto } from './dto/user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('all')
+  getAllUsers() {
+    return this.userService.getAllUsers();
+  }
 
   @Get('one/:id')
   getUser(@Param('id') id: string) {
     return this.userService.getOneUser(parseInt(id));
   }
 
-  @Get("all")
-  getAllUsers() {
-    return this.userService.getAllUsers();
+  @Put('one/:id')
+  updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return this.userService.updateUser(parseInt(id), dto);
+  }
+
+  @Delete('one/:id')
+  deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(parseInt(id));
   }
 }

@@ -133,3 +133,4 @@ dist
 .pnp.*
 
 react-sample/
+*.drawio.bkp
