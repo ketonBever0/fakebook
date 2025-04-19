@@ -1,3 +1,4 @@
+import { UserModule } from './user/user.module';
 import { OracleModule } from './oracle/oracle.module';
 import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+        UserModule, 
     OracleModule,
     AuthModule,
     ConfigModule.forRoot({

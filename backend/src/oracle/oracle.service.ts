@@ -5,7 +5,7 @@ import * as oracledb from 'oracledb';
 @Injectable()
 export class OracleService {
   pool: oracledb.Connection | null;
-  readonly jsonFormat = oracledb.OUT_FORMAT_OBJECT;
+  readonly jsonFormat = { outFormat: oracledb.OUT_FORMAT_OBJECT };
 
   constructor(private readonly config: ConfigService) {
     this.connect();

@@ -16,7 +16,7 @@ export class AppService {
           SELECT SYSDATE FROM DUAL
         `,
         [],
-        { outFormat: this.db.jsonFormat },
+        this.db.jsonFormat,
       )
       .then((res) => res.rows[0])
       .catch((e) => {
