@@ -4,7 +4,7 @@ import './LoginPage.css';
 
 interface RegisterFormData {
   email: string;
-  fullName: string;
+  fullname: string;
   password: string;
   birthDate: string;
   company: string;
@@ -21,7 +21,7 @@ interface RegisterResponse {
 const RegisterPage = ({ onLoginClick }: { onLoginClick: () => void }) => {
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
-    fullName: '',
+    fullname: '',
     password: '',
     birthDate: '',
     company: ''
@@ -113,7 +113,7 @@ const RegisterPage = ({ onLoginClick }: { onLoginClick: () => void }) => {
             <input
               type="text"
               id="fullName"
-              value={formData.fullName}
+              value={formData.fullname}
               onChange={handleChange}
               placeholder="Teszt Elek"
               required
