@@ -22,7 +22,7 @@ export class OracleService {
     )
       .getConnection()
       .then((res) => {
-        // console.log('OracleDB connection pool created successfully');
+        console.log('OracleDB connection pool created successfully!');
         return res;
       })
       .catch((e) => {
