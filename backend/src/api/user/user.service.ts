@@ -11,14 +11,13 @@ import {
 } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
 import { UpdateUserDto } from './dto/user.dto';
-import { ExecuteOptions } from 'oracledb';
 
 @Injectable()
 export class UserService {
   constructor(private readonly db: OracleService) {}
 
   async getOneUser(id: number) {
-    await this.db.pool
+    const result = await this.db.pool
       .execute(
         `
       SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", BIRTH_DATE AS "birthDate", COMPANY AS "company", ROLE AS "role"
@@ -29,9 +28,10 @@ export class UserService {
         this.db.jsonFormat,
       )
       .then((res) => {
-        if (res.rows.length > 0) return res.rows[0];
-        else throw new NotFoundException('User not found!');
+        if (res.rows.length == 1) return res.rows[0];
       });
+    if (!result) throw new NotFoundException('User not found!');
+    return result;
   }
 
   async getAllUsers() {

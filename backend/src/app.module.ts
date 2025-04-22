@@ -1,6 +1,6 @@
-import { UserModule } from './user/user.module';
+import { UserModule } from './api/user/user.module';
 import { OracleModule } from './oracle/oracle.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './api/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-        UserModule, 
+    UserModule,
     OracleModule,
     AuthModule,
     ConfigModule.forRoot({
