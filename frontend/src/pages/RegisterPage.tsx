@@ -109,10 +109,10 @@ const RegisterPage = ({ onLoginClick }: { onLoginClick: () => void }) => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="fullName">Teljes név</label>
+            <label htmlFor="fullname">Teljes név</label>
             <input
               type="text"
-              id="fullName"
+              id="fullname"
               value={formData.fullname}
               onChange={handleChange}
               placeholder="Teszt Elek"
