@@ -12,7 +12,6 @@ import { OracleService } from 'src/oracle/oracle.service';
 import { LoginDto, RegisterDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import OracleDB from 'oracledb';
 
 @Injectable()
 export class AuthService {

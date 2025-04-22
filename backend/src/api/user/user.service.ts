@@ -46,9 +46,9 @@ export class UserService {
     return res.rows;
   }
 
-  async updateUser(@Param('id') id: number, dto: UpdateUserDto) {
-    try {
-      const result: any = await this.db.pool.execute(
+  async updateUser(id: number, dto: UpdateUserDto) {
+    const result = await this.db.pool
+      .execute(
         `
         UPDATE USERS
         SET EMAIL = :email, FULLNAME = :fullname, BIRTH_DATE = TO_DATE(:birthDate, 'yyyy-mm-dd'), COMPANY = :company, ROLE = :role
@@ -63,24 +63,24 @@ export class UserService {
           role: dto.role,
         },
         this.db.autoCommit,
-      );
+      )
+      .then((res) => {
+        if(res.rowsAffected == 1) return { message: 'User updated successfully!' };
+      })
+      .catch((e: Error) => {
+        if (e.message.includes('USERS_EMAIL_UNIQUE')) {
+          throw new ConflictException('E-mail already exists!');
+        }
 
-      if (result.rowsAffected && result.rowsAffected[0] === 1) {
-        return { message: 'User updated successfully!' };
-      } else {
-        throw new NotFoundException('User not found!');
-      }
-    } catch (e: any) {
-      if (e.message.includes('USERS_EMAIL_UNIQUE')) {
-        throw new ConflictException('E-mail already exists!');
-      }
+        if (e.message.includes('FORBIDDEN_EXPRESSION')) {
+          throw new NotAcceptableException(
+            'Obscene expression found in fullname!',
+          );
+        }
+      });
 
-      if (e.message.includes('FORBIDDEN_EXPRESSION')) {
-        throw new NotAcceptableException(
-          'Obscene expression found in fullname!',
-        );
-      }
-    }
+    if (!result) throw new NotFoundException('User not found!');
+    return result;
   }
 
   async deleteUser(id: number) {
