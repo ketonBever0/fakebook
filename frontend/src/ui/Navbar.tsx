@@ -8,6 +8,8 @@ export default function Navbar() {
             <div className="menu">
                 <Link to={"/"}>Home</Link>
                 <Link to={"/users"}>Users</Link>
+                <Link to={"/LoginPage"}>Bejelentkezés</Link>
+                <Link to={"/RegisterPage"}>Regisztráció</Link>
             </div>
         </nav>
     );

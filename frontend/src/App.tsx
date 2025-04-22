@@ -2,8 +2,9 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './ui/Navbar'
 import Users from './pages/Users'
-import Home from './pages/home'
-
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import Home from './pages/Home'
 
 function App() {
 
@@ -17,6 +18,8 @@ function App() {
           <Route path='*' element={<Home />} />
           <Route path='/' element={<Home />} />
           <Route path='/users' element={<Users />} />
+          <Route path='/LoginPage' element={<LoginPage />} />
+          <Route path='/RegisterPage' element={<RegisterPage />} />
         </Routes>
       </Router>
 
