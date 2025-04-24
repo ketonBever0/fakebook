@@ -1,18 +1,14 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Param,
   Patch,
   Post,
-  Put,
-  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
-import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {

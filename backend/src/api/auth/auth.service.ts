@@ -80,7 +80,7 @@ export class AuthService {
     const user: any = await this.db.pool
       .execute(
         `
-      SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", PASSWORD AS "password", BIRTH_DATE AS "birthDate", COMPANY AS "company"
+      SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", PASSWORD AS "password", BIRTH_DATE AS "birthDate", COMPANY AS "company", ROLE AS "role"
       FROM USERS
       WHERE email = :email
       `,
