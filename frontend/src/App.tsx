@@ -13,29 +13,33 @@ import GroupMessages from './pages/GroupMessages';
 import UserGroups from './pages/UserGroups';
 import UserInterests from './pages/UserInterests';
 import ForbiddenExpressions from './pages/ForbiddenExpressions';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
-      <div id='main'>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path='*' element={<Home />} />
-            <Route path='/' element={<Home />} />
-            <Route path='/users' element={<Users />} />
-            <Route path='/interests' element={<Interests />} />
-            <Route path='/messages' element={<Messages />} />
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/comments" element={<Comments />} />
-            <Route path="/friends" element={<Friends />} />
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/group-messages" element={<GroupMessages />} />
-            <Route path="/user-groups" element={<UserGroups />} />
-            <Route path="/user-interests" element={<UserInterests />} />
-            <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} /> {/* Add ForbiddenExpressions route */}
-          </Routes>
-        </Router>
-      </div>
+    <div id='main'>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='*' element={<Home />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/LoginPage' element={<LoginPage />} />
+          <Route path='/RegisterPage' element={<RegisterPage />} />
+          <Route path='/users' element={<Users />} />
+          <Route path='/interests' element={<Interests />} />
+          <Route path='/messages' element={<Messages />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/comments" element={<Comments />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/groups" element={<Groups />} />
+          <Route path="/group-messages" element={<GroupMessages />} />
+          <Route path="/user-groups" element={<UserGroups />} />
+          <Route path="/user-interests" element={<UserInterests />} />
+          <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} /> {/* Add ForbiddenExpressions route */}
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

@@ -18,6 +18,8 @@ export default function Navbar() {
                 <Link to={"/user-groups"}>User Groups</Link>
                 <Link to={"/user-interests"}>User Interests</Link>
                 <Link to={"/forbidden-expressions"}>Forbidden Expressions</Link>
+                <Link to={"/LoginPage"}>Bejelentkezés</Link>
+                <Link to={"/RegisterPage"}>Regisztráció</Link>
             </div>
         </nav>
     );
