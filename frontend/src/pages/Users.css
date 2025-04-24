@@ -66,6 +66,14 @@ input.new-user {
     border-radius: 12px;
     margin-bottom: 15px;
 }
+textarea.new-user {
+    width: 80%;
+    padding: 10px;
+    background-color: #fff5e8;
+    border: 1px solid #08bdbd;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
 
 
 /* Edit user input styles */
