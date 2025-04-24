@@ -6,10 +6,12 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { InterestModule } from './api/interest/interest.module';
 
 @Module({
   imports: [
-        ObsceneModule, 
+    InterestModule,
+    ObsceneModule,
     UserModule,
     OracleModule,
     AuthModule,
