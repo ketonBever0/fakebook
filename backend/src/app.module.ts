@@ -1,3 +1,4 @@
+import { PostModule } from './api/post/post.module';
 import { ObsceneModule } from './api/obscene/obscene.module';
 import { UserModule } from './api/user/user.module';
 import { OracleModule } from './oracle/oracle.module';
@@ -6,10 +7,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { InterestModule } from './api/interest/interest.module';
 
 @Module({
   imports: [
-        ObsceneModule, 
+    PostModule,
+    InterestModule,
+    ObsceneModule,
     UserModule,
     OracleModule,
     AuthModule,
