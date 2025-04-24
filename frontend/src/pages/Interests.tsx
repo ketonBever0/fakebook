@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Users.css";
+import "./Users.css"; // Reuse Users.css for consistent styling
 
 export default function Interests() {
   type InterestType = {
@@ -13,59 +13,32 @@ export default function Interests() {
   const [editingInterestId, setEditingInterestId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<InterestType | null>(null);
 
-  // // Fetch interests on component mount
-  // useEffect(() => {
-  //   const fetchInterests = async () => {
-  //     try {
-  //       const res = await axios.get("/api/interests/all"); // Placeholder endpoint
-  //       console.log("Fetched interests:", res.data);
-  //       setInterests(res.data);
-  //     } catch (err) {
-  //       console.error("Error fetching interests:", err);
-  //       alert("Failed to fetch interests.");
-  //     }
-  //   };
-  //   fetchInterests();
-  // }, []);
-
+  // Fetch interests on component mount
   useEffect(() => {
-    // Dummy data for testing
-    const dummyInterests = [
-      { id: 1, name: "Programming" },
-      { id: 2, name: "Photography" },
-      { id: 3, name: "Gaming" },
-      { id: 4, name: "Traveling" },
-      { id: 5, name: "Cooking" },
-    ];
-
-    // Simulate a delay as if fetching from the backend
-    const fetchDummyData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1-second delay
-      console.log("Fetched dummy interests:", dummyInterests);
-      setInterests(dummyInterests);
+    const fetchInterests = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/interest");
+        console.log("Fetched interests:", res.data);
+        setInterests(res.data);
+      } catch (err) {
+        console.error("Error fetching interests:", err);
+        alert("Failed to fetch interests.");
+      }
     };
-
-    fetchDummyData();
+    fetchInterests();
   }, []);
 
-
-  // Handle input changes for both adding and editing forms
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement>,
       isEditing: boolean = false
   ) => {
-    try {
-      if (isEditing && editFormData) {
-        setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
-      } else {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      }
-    } catch (err) {
-      console.error("Error handling input changes:", err);
+    if (isEditing && editFormData) {
+      setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
 
-  // Add a new interest
   const addInterest = async () => {
     if (!formData.name.trim()) {
       alert("Interest name cannot be empty.");
@@ -73,71 +46,87 @@ export default function Interests() {
     }
 
     try {
-      const res = await axios.post("/api/interests", { name: formData.name }); // Placeholder endpoint
+      const res = await axios.post("http://localhost:3000/api/interest", { name: formData.name });
+
       alert(res.data.message);
 
       // Refetch interests after adding
-      const fetchRes = await axios.get("/api/interests/all");
+      const fetchRes = await axios.get("http://localhost:3000/api/interest");
       setInterests(fetchRes.data);
 
       // Reset the form
       setFormData({ name: "" });
     } catch (err) {
-      console.error("Error adding interest:", err);
-      alert("Failed to add interest. Please try again.");
-    }
-  };
-
-  // Edit an interest
-  const saveInterest = async (id: number) => {
-    try {
-      if (editFormData) {
-        const res = await axios.put(`/api/interests/${id}`, { name: editFormData.name }); // Placeholder endpoint
-        alert(res.data.message);
-
-        // Refetch interests after editing
-        const fetchRes = await axios.get("/api/interests/all");
-        setInterests(fetchRes.data);
-
-        cancelEditing();
+      if (err.response?.status === 409) {
+        alert("This interest already exists!");
+      } else {
+        console.error("Error adding interest:", err);
+        alert("Failed to add interest. Please try again.");
       }
-    } catch (err) {
-      console.error("Error editing interest:", err);
-      alert("Failed to edit interest. Please try again.");
     }
   };
 
-  // Start editing mode
+  const saveInterest = async (id: number) => {
+    if (!editFormData?.name.trim()) {
+      alert("Interest name cannot be empty.");
+      return;
+    }
+
+    try {
+      const res = await axios.put(`http://localhost:3000/api/interest/${id}`, { name: editFormData.name });
+
+      alert(res.data.message);
+
+      // Refetch interests after editing
+      const fetchRes = await axios.get("http://localhost:3000/api/interest");
+      setInterests(fetchRes.data);
+
+      cancelEditing();
+    } catch (err) {
+      if (err.response?.status === 409) {
+        alert("This interest already exists!");
+      } else if (err.response?.status === 404) {
+        alert("Interest not found.");
+      } else {
+        console.error("Error editing interest:", err);
+        alert("Failed to edit interest. Please try again.");
+      }
+    }
+  };
+
+  const deleteInterest = async (id: number) => {
+    try {
+      const res = await axios.delete(`http://localhost:3000/api/interest/${id}`);
+      alert(res.data.message);
+
+      // Refetch interests after deleting
+      const fetchRes = await axios.get("http://localhost:3000/api/interest");
+      setInterests(fetchRes.data);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        alert("Interest not found.");
+      } else {
+        console.error("Error deleting interest:", err);
+        alert("Failed to delete interest. Please try again.");
+      }
+    }
+  };
+
   const startEditing = (interest: InterestType) => {
     setEditingInterestId(interest.id);
     setEditFormData({ ...interest });
   };
 
-  // Cancel editing mode
   const cancelEditing = () => {
     setEditingInterestId(null);
     setEditFormData(null);
-  };
-
-  // Delete an interest
-  const deleteInterest = async (id: number) => {
-    try {
-      const res = await axios.delete(`/api/interests/${id}`); // Placeholder endpoint
-      alert(res.data.message);
-
-      // Refetch interests after deleting
-      const fetchRes = await axios.get("/api/interests/all");
-      setInterests(fetchRes.data);
-    } catch (err) {
-      console.error("Error deleting interest:", err);
-      alert("Failed to delete interest. Please try again.");
-    }
   };
 
   return (
       <div className="container">
         <h1>Interests Page</h1>
 
+        {/* Add New Interest */}
         <div className="container">
           <h2>Add New Interest</h2>
           <form onSubmit={(e) => e.preventDefault()} style={{ marginBottom: "20px" }} className="form-container">
@@ -157,6 +146,7 @@ export default function Interests() {
           </form>
         </div>
 
+        {/* Display All Interests */}
         <div>
           <h2>All Interests</h2>
           <table>
@@ -175,10 +165,10 @@ export default function Interests() {
                         <td>{interest.id}</td>
                         <td>
                           <input
-                              className="edit-interest"
                               type="text"
                               name="name"
-                              value={editFormData?.name || ""}
+                              className="edit-user"
+                              value={editFormData?.name ?? ""}
                               onChange={(e) => handleChange(e, true)}
                           />
                         </td>

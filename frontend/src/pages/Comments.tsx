@@ -19,41 +19,20 @@ export default function Comments() {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<CommentType | null>(null);
 
-  // // Fetch comments on component mount
-  // useEffect(() => {
-  //   const fetchComments = async () => {
-  //     try {
-  //       const res = await axios.get("/api/comments/all"); // Replace with your backend endpoint
-  //       console.log("Fetched comments:", res.data);
-  //       setComments(res.data);
-  //     } catch (err) {
-  //       console.error("Error fetching comments:", err);
-  //       alert("Failed to fetch comments.");
-  //     }
-  //   };
-  //   fetchComments();
-  // }, []);
-
+  // Fetch all comments on component mount
   useEffect(() => {
-    const fetchDummyComments = async () => {
-      // Simulate dummy data
-      const dummyComments = [
-        { id: 1, text: "Great post!", authorId: 1, postId: 101 },
-        { id: 2, text: "I completely agree with you!", authorId: 2, postId: 102 },
-        { id: 3, text: "This is so insightful.", authorId: 3, postId: 101 },
-        { id: 4, text: "Thanks for sharing!", authorId: 4, postId: 103 },
-      ];
-
-      // Simulate a delay, as if fetching from a backend API
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1-second delay
-
-      console.log("Fetched dummy comments:", dummyComments);
-      setComments(dummyComments); // Update state with dummy data
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/comment");
+        console.log("Fetched comments:", res.data);
+        setComments(res.data);
+      } catch (err) {
+        console.error("Error fetching comments:", err);
+        alert("Failed to fetch comments.");
+      }
     };
-
-    fetchDummyComments();
+    fetchComments();
   }, []);
-
 
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -73,16 +52,16 @@ export default function Comments() {
     }
 
     try {
-      const res = await axios.post("/api/comments", {
+      const postId = formData.postId ? parseInt(formData.postId) : null;
+      const res = await axios.post(`http://localhost:3000/api/comment/post/${postId}`, {
         text: formData.text,
         authorId: formData.authorId ? parseInt(formData.authorId) : null,
-        postId: formData.postId ? parseInt(formData.postId) : null,
-      }); // Replace with your backend endpoint
+      });
 
       alert(res.data.message);
 
       // Refetch comments after adding
-      const fetchRes = await axios.get("/api/comments/all");
+      const fetchRes = await axios.get("http://localhost:3000/api/comment");
       setComments(fetchRes.data);
 
       // Reset the form
@@ -92,45 +71,55 @@ export default function Comments() {
         postId: "",
       });
     } catch (err) {
-      console.error("Error adding comment:", err);
-      alert("Failed to add comment. Please try again.");
+      if (err.response?.status === 404) {
+        alert("Post not found.");
+      } else {
+        console.error("Error adding comment:", err);
+        alert("Failed to add comment. Please try again.");
+      }
     }
   };
 
   const saveComment = async (id: number) => {
     try {
       if (editFormData) {
-        const res = await axios.put(`/api/comments/${id}`, {
+        const res = await axios.put(`http://localhost:3000/api/comment/comment/${id}`, {
           text: editFormData.text,
-          authorId: editFormData.authorId,
-          postId: editFormData.postId,
-        }); // Replace with your backend endpoint
+        });
 
         alert(res.data.message);
 
         // Refetch comments after editing
-        const fetchRes = await axios.get("/api/comments/all");
+        const fetchRes = await axios.get("http://localhost:3000/api/comment");
         setComments(fetchRes.data);
 
         cancelEditing();
       }
     } catch (err) {
-      console.error("Error editing comment:", err);
-      alert("Failed to edit comment. Please try again.");
+      if (err.response?.status === 404) {
+        alert("Comment not found.");
+      } else {
+        console.error("Error editing comment:", err);
+        alert("Failed to edit comment. Please try again.");
+      }
     }
   };
 
   const deleteComment = async (id: number) => {
     try {
-      const res = await axios.delete(`/api/comments/${id}`); // Replace with your backend endpoint
+      const res = await axios.delete(`http://localhost:3000/api/comment/comment/${id}`);
       alert(res.data.message);
 
       // Refetch comments after deleting
-      const fetchRes = await axios.get("/api/comments/all");
+      const fetchRes = await axios.get("http://localhost:3000/api/comment");
       setComments(fetchRes.data);
     } catch (err) {
-      console.error("Error deleting comment:", err);
-      alert("Failed to delete comment. Please try again.");
+      if (err.response?.status === 404) {
+        alert("Comment not found.");
+      } else {
+        console.error("Error deleting comment:", err);
+        alert("Failed to delete comment. Please try again.");
+      }
     }
   };
 
@@ -148,6 +137,7 @@ export default function Comments() {
       <div className="container">
         <h1>Comments Page</h1>
 
+        {/* Add New Comment */}
         <div className="container">
           <h2>Add New Comment</h2>
           <form onSubmit={(e) => e.preventDefault()} style={{ marginBottom: "20px" }} className="form-container">
@@ -186,6 +176,7 @@ export default function Comments() {
           </form>
         </div>
 
+        {/* Display All Comments */}
         <div>
           <h2>All Comments</h2>
           <table>
@@ -208,28 +199,12 @@ export default function Comments() {
                       <textarea
                           name="text"
                           className="edit-user"
-                          value={editFormData?.text || ""}
+                          value={editFormData?.text ?? ""}
                           onChange={(e) => handleChange(e, true)}
                       />
                         </td>
-                        <td>
-                          <input
-                              type="number"
-                              name="authorId"
-                              className="edit-user"
-                              value={editFormData?.authorId || ""}
-                              onChange={(e) => handleChange(e, true)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                              type="number"
-                              name="postId"
-                              className="edit-user"
-                              value={editFormData?.postId || ""}
-                              onChange={(e) => handleChange(e, true)}
-                          />
-                        </td>
+                        <td>{comment.authorId || "No Author ID"}</td>
+                        <td>{comment.postId}</td>
                         <td>
                           <button className="save" onClick={() => saveComment(comment.id)}>
                             Save

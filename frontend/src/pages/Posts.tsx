@@ -19,55 +19,20 @@ export default function Posts() {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<PostType | null>(null);
 
-  // // Fetch posts on component mount
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     try {
-  //       const res = await axios.get("/api/posts/all"); // Replace with your backend endpoint
-  //       console.log("Fetched posts:", res.data);
-  //       setPosts(res.data);
-  //     } catch (err) {
-  //       console.error("Error fetching posts:", err);
-  //       alert("Failed to fetch posts.");
-  //     }
-  //   };
-  //   fetchPosts();
-  // }, []);
-
+  // Fetch posts on component mount
   useEffect(() => {
-    const fetchDummyPosts = async () => {
-      // Simulate dummy data
-      const dummyPosts = [
-        {
-          id: 1,
-          text: "This is the first post!",
-          imageUrl: "https://example.com/image1.jpg",
-          authorId: 1,
-        },
-        {
-          id: 2,
-          text: "Another post here.",
-          imageUrl: "https://example.com/image2.jpg",
-          authorId: 2,
-        },
-        {
-          id: 3,
-          text: "Dummy post number three.",
-          imageUrl: "",
-          authorId: 3,
-        },
-      ];
-
-      // Simulate a delay to mimic a backend API call
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1-second delay
-
-      console.log("Fetched dummy posts:", dummyPosts);
-      setPosts(dummyPosts); // Set posts state with the dummy data
+    const fetchPosts = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/post/all");
+        console.log("Fetched posts:", res.data);
+        setPosts(res.data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+        alert("Failed to fetch posts.");
+      }
     };
-
-    fetchDummyPosts();
+    fetchPosts();
   }, []);
-
 
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -87,16 +52,24 @@ export default function Posts() {
     }
 
     try {
-      const res = await axios.post("/api/posts", {
+      console.log("Post payload:", {
         text: formData.text,
         imageUrl: formData.imageUrl || null,
         authorId: formData.authorId ? parseInt(formData.authorId) : null,
-      }); // Replace with your backend endpoint
+      });
 
-      alert(res.data.message);
+      const res = await axios.post("http://localhost:3000/api/post/", {
+        text: formData.text,
+        imageUrl: formData.imageUrl || null,
+        authorId: formData.authorId ? parseInt(formData.authorId) : null,
+      });
+
+
+      // Handle successful response
+      alert("Post added successfully!");
 
       // Refetch posts after adding
-      const fetchRes = await axios.get("/api/posts/all");
+      const fetchRes = await axios.get("http://localhost:3000/api/post/all");
       setPosts(fetchRes.data);
 
       // Reset the form
@@ -106,45 +79,63 @@ export default function Posts() {
         authorId: "",
       });
     } catch (err) {
-      console.error("Error adding post:", err);
-      alert("Failed to add post. Please try again.");
+      if (err.response?.status === 404) {
+        alert("Author ID does not exist. Please provide a valid author.");
+      } else if (err.response?.status === 400) {
+        alert(`Invalid data: ${err.response.data.message.join(", ")}`);
+      } else {
+        console.error("Error adding post:", err.response?.data || err.message);
+        alert("Failed to add post. Please try again.");
+      }
     }
   };
 
   const savePost = async (id: number) => {
     try {
       if (editFormData) {
-        const res = await axios.put(`/api/posts/${id}`, {
+        const res = await axios.put(`http://localhost:3000/api/post/one/${id}`, {
           text: editFormData.text,
           imageUrl: editFormData.imageUrl || null,
-          authorId: editFormData.authorId,
-        }); // Replace with your backend endpoint
+        });
 
-        alert(res.data.message);
+        // Handle successful response
+        alert("Post updated successfully!");
 
         // Refetch posts after editing
-        const fetchRes = await axios.get("/api/posts/all");
+        const fetchRes = await axios.get("http://localhost:3000/api/post/all");
         setPosts(fetchRes.data);
 
         cancelEditing();
       }
     } catch (err) {
-      console.error("Error editing post:", err);
-      alert("Failed to edit post. Please try again.");
+      if (err.response?.status === 400) {
+        alert(`Invalid data: ${err.response.data.message.join(", ")}`);
+      } else if (err.response?.status === 404) {
+        alert("Post not found.");
+      } else {
+        console.error("Error editing post:", err);
+        alert("Failed to edit post. Please try again.");
+      }
     }
   };
 
   const deletePost = async (id: number) => {
     try {
-      const res = await axios.delete(`/api/posts/${id}`); // Replace with your backend endpoint
-      alert(res.data.message);
+      const res = await axios.delete(`http://localhost:3000/api/post/one/${id}`);
+
+      // Handle successful response
+      alert("Post deleted successfully!");
 
       // Refetch posts after deleting
-      const fetchRes = await axios.get("/api/posts/all");
+      const fetchRes = await axios.get("http://localhost:3000/api/post/all");
       setPosts(fetchRes.data);
     } catch (err) {
-      console.error("Error deleting post:", err);
-      alert("Failed to delete post. Please try again.");
+      if (err.response?.status === 404) {
+        alert("Post not found.");
+      } else {
+        console.error("Error deleting post:", err);
+        alert("Failed to delete post. Please try again.");
+      }
     }
   };
 
@@ -162,6 +153,7 @@ export default function Posts() {
       <div className="container">
         <h1>Posts Page</h1>
 
+        {/* Add New Post */}
         <div className="container">
           <h2>Add New Post</h2>
           <form onSubmit={(e) => e.preventDefault()} style={{ marginBottom: "20px" }} className="form-container">
@@ -200,6 +192,7 @@ export default function Posts() {
           </form>
         </div>
 
+        {/* Display All Posts */}
         <div>
           <h2>All Posts</h2>
           <table>
@@ -219,12 +212,12 @@ export default function Posts() {
                       <>
                         <td>{post.id}</td>
                         <td>
-                      <textarea
-                          name="text"
-                          className="edit-user"
-                          value={editFormData?.text || ""}
-                          onChange={(e) => handleChange(e, true)}
-                      />
+                    <textarea
+                        name="text"
+                        className="edit-user"
+                        value={editFormData?.text || ""}
+                        onChange={(e) => handleChange(e, true)}
+                    />
                         </td>
                         <td>
                           <input
@@ -235,15 +228,7 @@ export default function Posts() {
                               onChange={(e) => handleChange(e, true)}
                           />
                         </td>
-                        <td>
-                          <input
-                              type="number"
-                              name="authorId"
-                              className="edit-user"
-                              value={editFormData?.authorId || ""}
-                              onChange={(e) => handleChange(e, true)}
-                          />
-                        </td>
+                        <td>{post.authorId || "No Author ID"}</td> {/* Display Author ID */}
                         <td>
                           <button className="save" onClick={() => savePost(post.id)}>
                             Save
@@ -276,4 +261,5 @@ export default function Posts() {
         </div>
       </div>
   );
+
 }
