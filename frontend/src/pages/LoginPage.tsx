@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { useNavigate } from "react-router-dom";
 import './LoginPage.css';
 
 interface LoginFormData {
@@ -12,6 +13,7 @@ interface LoginResponse {
 }
 
 const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -30,18 +32,21 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const response = await axios.post<LoginResponse>(
-        "http://localhost:3000/api/auth/login",
-        formData
+      const response = await axios.post(
+          "http://localhost:3000/api/auth/login",
+          formData
       );
 
-
+      // Save the token and user data to localStorage
       localStorage.setItem("accessToken", response.data.token);
+      localStorage.setItem("userData", JSON.stringify(response.data.user)); // Store user data as JSON
 
+      console.log("Access Token Set:", response.data.token);
+      console.log("User Data Set:", response.data.user);
 
       if (rememberMe) {
         localStorage.setItem("userEmail", formData.email);
@@ -49,22 +54,23 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
         localStorage.removeItem("userEmail");
       }
 
-
       alert("Sikeres bejelentkezés!");
 
-
-
+      // Redirect to home page and refresh the page
+      navigate("/");
+      window.location.reload();
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       setError(
-        error.response?.data?.message ||
-        'Sikertelen bejelentkezés, a jelszó vagy e-mail cím nem megfelelő'
+          error.response?.data?.message ||
+          "Sikertelen bejelentkezés, a jelszó vagy e-mail cím nem megfelelő"
       );
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
 
   return (
     <div className="login-container">

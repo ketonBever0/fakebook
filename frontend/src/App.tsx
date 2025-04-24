@@ -18,28 +18,32 @@ import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
-    <div id='main'>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path='*' element={<Home />} />
-          <Route path='/' element={<Home />} />
-          <Route path='/LoginPage' element={<LoginPage />} />
-          <Route path='/RegisterPage' element={<RegisterPage />} />
-          <Route path='/users' element={<Users />} />
-          <Route path='/interests' element={<Interests />} />
-          <Route path='/messages' element={<Messages />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/comments" element={<Comments />} />
-          <Route path="/friends" element={<Friends />} />
-          <Route path="/groups" element={<Groups />} />
-          <Route path="/group-messages" element={<GroupMessages />} />
-          <Route path="/user-groups" element={<UserGroups />} />
-          <Route path="/user-interests" element={<UserInterests />} />
-          <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} /> {/* Add ForbiddenExpressions route */}
-        </Routes>
-      </Router>
-    </div>
+      <div id='main'>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path='*' element={<Home />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/LoginPage' element={<LoginPage onRegisterClick={function (): void {
+              throw new Error('Function not implemented.');
+            } } />} />
+            <Route path='/RegisterPage' element={<RegisterPage onLoginClick={function (): void {
+              throw new Error('Function not implemented.');
+            } } />} />
+            <Route path='/users' element={<Users />} />
+            <Route path='/interests' element={<Interests />} />
+            <Route path='/messages' element={<Messages />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/comments" element={<Comments />} />
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/groups" element={<Groups />} />
+            <Route path="/group-messages" element={<GroupMessages />} />
+            <Route path="/user-groups" element={<UserGroups />} />
+            <Route path="/user-interests" element={<UserInterests />} />
+            <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} /> {/* Add ForbiddenExpressions route */}
+          </Routes>
+        </Router>
+      </div>
   );
 }
 
