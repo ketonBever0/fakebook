@@ -323,19 +323,19 @@ CREATE TABLE "FAKEBOOK"."FORBIDDEN_EXPRESSIONS"
 
 -- USERS
 INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL, ROLE)
-VALUES ('johndoe@example.com', 'John Doe', 'password123', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'FakeBook Inc.', 'http://example.com/johndoe.jpg', 'ADMIN');
+VALUES ('johndoe@example.com', 'John Doe', '$argon2id$v=19$m=65536,t=3,p=4$voBg+LKl57PyQW3BrttpXQ$H2Kmv776/syEl6BzBmYv+BjI+kL4Lt/wapkxDxVzf6M', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'FakeBook Inc.', 'http://example.com/johndoe.jpg', 'ADMIN');
 
 INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL, ROLE )
-VALUES ('janedoe@example.com', 'Jane Doe', 'password456', TO_DATE('1992-08-21', 'YYYY-MM-DD'), 'FakeBook Ltd.', 'http://example.com/janedoe.jpg', 'ADMIN');
+VALUES ('janedoe@example.com', 'Jane Doe', '$argon2id$v=19$m=65536,t=3,p=4$9h3S8Po5nYoRk3DmOD6kgA$wy/eKdSc5prUyfaWQrZSawBsVx/LO1O7wPT/zwQKItE', TO_DATE('1992-08-21', 'YYYY-MM-DD'), 'FakeBook Ltd.', 'http://example.com/janedoe.jpg', 'ADMIN');
 
 INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL, ROLE)
-VALUES ('alexsmith@example.com', 'Alex Smith', 'securePass789', TO_DATE('1985-11-10', 'YYYY-MM-DD'), 'Tech Inc.', NULL, 'MODERATOR');
+VALUES ('alexsmith@example.com', 'Alex Smith', '$argon2id$v=19$m=65536,t=3,p=4$qWSc3OVKNQ6mAy66wqUGZg$A0v/I//w5IE36jQVPrpZp/cTVsBLuOe9Prj/9RYoyok', TO_DATE('1985-11-10', 'YYYY-MM-DD'), 'Tech Inc.', NULL, 'MODERATOR');
 
 INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
-VALUES ('emilyjones@example.com', 'Emily Jones', 'mypassword111', TO_DATE('1993-03-02', 'YYYY-MM-DD'), 'Creative Solutions', NULL);
+VALUES ('emilyjones@example.com', 'Emily Jones', '$argon2id$v=19$m=65536,t=3,p=4$8sii2ixQu78DwljTA7dSRw$ypZi9e7wBEng4TEUggMLYj9x1U3JspdtDdNckeCsbmI', TO_DATE('1993-03-02', 'YYYY-MM-DD'), 'Creative Solutions', NULL);
 
 INSERT INTO FAKEBOOK.USERS (EMAIL, FULLNAME, PASSWORD, BIRTH_DATE, COMPANY, PICTURE_URL)
-VALUES ('michaelbrown@example.com', 'Michael Brown', 'passwordABC123', TO_DATE('1989-07-19', 'YYYY-MM-DD'), 'Innovative Co.', NULL);
+VALUES ('michaelbrown@example.com', 'Michael Brown', '$argon2id$v=19$m=65536,t=3,p=4$KfmM1SBAqJYVEuecRb+vVQ$05i73xpHoR3s0eWn4eJHew4pI3ZRNeefo0yFwWnaXZg', TO_DATE('1989-07-19', 'YYYY-MM-DD'), 'Innovative Co.', NULL);
 
 -- POSTS
 INSERT INTO FAKEBOOK.POSTS (TEXT, IMAGE_URL, AUTHOR_ID)
