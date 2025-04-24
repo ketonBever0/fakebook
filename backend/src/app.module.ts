@@ -1,3 +1,4 @@
+import { PostModule } from './api/post/post.module';
 import { ObsceneModule } from './api/obscene/obscene.module';
 import { UserModule } from './api/user/user.module';
 import { OracleModule } from './oracle/oracle.module';
@@ -10,6 +11,7 @@ import { InterestModule } from './api/interest/interest.module';
 
 @Module({
   imports: [
+    PostModule,
     InterestModule,
     ObsceneModule,
     UserModule,
