@@ -65,8 +65,8 @@ const RegisterPage = ({ onLoginClick }: { onLoginClick: () => void }) => {
       
       localStorage.setItem("accessToken", response.data.token);
       
-      console.log("Regisztráció sikeres!");
-      
+      alert("Regisztráció sikeres!");
+      return;
       onLoginClick();
       
     } catch (err) {

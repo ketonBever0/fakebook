@@ -35,29 +35,29 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
 
     try {
       const response = await axios.post<LoginResponse>(
-        "http://localhost:3000/api/auth/login", 
+        "http://localhost:3000/api/auth/login",
         formData
       );
-      
-      
+
+
       localStorage.setItem("accessToken", response.data.token);
-      
-      
+
+
       if (rememberMe) {
         localStorage.setItem("userEmail", formData.email);
       } else {
         localStorage.removeItem("userEmail");
       }
-      
-      
-      console.log("Sikeres bejelentkezés!");
-      
-      
-      
+
+
+      alert("Sikeres bejelentkezés!");
+
+
+
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       setError(
-        error.response?.data?.message || 
+        error.response?.data?.message ||
         'Sikertelen bejelentkezés, a jelszó vagy e-mail cím nem megfelelő'
       );
       console.log(error);
@@ -70,14 +70,14 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
     <div className="login-container">
       <div className="backlight-circle circle1"></div>
       <div className="backlight-circle circle2"></div>
-      
+
       <div className="login-card">
         <div className="login-header">
           <h1>Bejelentkezés</h1>
         </div>
-        
+
         {error && <div className="error-message">{error}</div>}
-        
+
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -90,7 +90,7 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Jelszó</label>
             <input
@@ -102,7 +102,7 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
               required
             />
           </div>
-          
+
           <div className="form-options">
             <div className="remember-me">
               <input
@@ -114,16 +114,16 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
               <label htmlFor="remember-me">Adatok megjegyzése</label>
             </div>
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="login-button"
             disabled={loading}
           >
             {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
           </button>
         </form>
-        
+
         <div className="login-footer">
           <p>Még nincs fiókod? <a href="#signup" onClick={(e) => {
             e.preventDefault();
