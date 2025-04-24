@@ -1,3 +1,4 @@
+
 # Fakebook
 
 Project for Database-based systems course in University of Szeged.
@@ -10,4 +11,5 @@ Project for Database-based systems course in University of Szeged.
 4. Futtassuk le a szkriptfájlt.
 5. A projekt gyökerében található backend mappában nyissunk terminált, majd írjuk be a következőt: `npm i`, majd `npm start`
 6. Ugyanígy nyissunk terminált a frontend mappában, a parancsok: `npm i`, majd `npm run dev`
-7. Ha a terminál kiír egy ilyet, hogy "http://localhost:5173", nyissuk meg. 
+7. Ha a terminál kiír egy ilyet, hogy "http://localhost:5173", nyissuk meg.
+- Minden user jelszava: `123QWE#asd`

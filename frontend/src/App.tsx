@@ -24,8 +24,12 @@ function App() {
         <Routes>
           <Route path='*' element={<Home />} />
           <Route path='/' element={<Home />} />
-          <Route path='/LoginPage' element={<LoginPage />} />
-          <Route path='/RegisterPage' element={<RegisterPage />} />
+          <Route path='/LoginPage' element={<LoginPage onRegisterClick={function (): void {
+            throw new Error('Function not implemented.');
+          } } />} />
+          <Route path='/RegisterPage' element={<RegisterPage onLoginClick={function (): void {
+            throw new Error('Function not implemented.');
+          } } />} />
           <Route path='/users' element={<Users />} />
           <Route path='/interests' element={<Interests />} />
           <Route path='/messages' element={<Messages />} />
