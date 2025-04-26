@@ -1,17 +1,20 @@
 import * as argon from 'argon2';
 
 import {
-  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
   NotAcceptableException,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
-import { LoginDto, RegisterDto } from './dto';
+import { ChangePasswordDto, LoginDto, RegisterDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthGuard } from './guard/auth.guard';
+import { RoleGuard } from './guard/role.guard';
+import { AuthModel, Roles, User, UserModel } from './decorator/auth.decorator';
 
 @Injectable()
 export class AuthService {
@@ -91,6 +94,15 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('E-mail address not found!');
 
+    await this.db.pool.execute(
+      `
+      UPDATE USERS SET LAST_LOGIN = SYSDATE
+      WHERE ID = :id
+      `,
+      { id: user.id },
+      this.db.autoCommit,
+    );
+
     if (await argon.verify(user.password, dto.password)) {
       const token = await this.signToken(user.id, user.email, user.role);
       delete user.password;
@@ -98,6 +110,25 @@ export class AuthService {
     } else {
       throw new ForbiddenException('Incorrect password!');
     }
+  }
+
+  async changePassword(id: number, dto: ChangePasswordDto) {
+    const password = await this.db.pool
+      .execute(
+        `
+      SELECT PASSWORD FROM USERS WHERE ID = :id
+      `,
+        { id: id },
+      )
+      .then((res) => res.rows[0][0]);
+
+    if (!(await argon.verify(password, dto.oldPassword))) {
+      throw new ForbiddenException('Old password is incorrect!');
+    }
+
+    return this.createPassword(id, dto.newPassword).then(() => {
+      return { message: 'Password updated.' };
+    });
   }
 
   async createPassword(id: number, password: string) {
@@ -111,7 +142,7 @@ export class AuthService {
         { password: hash, id: id },
         this.db.autoCommit,
       )
-      .then(async (res) => {
+      .then(async () => {
         const user: { email: string } = await this.db.pool
           .execute(
             `

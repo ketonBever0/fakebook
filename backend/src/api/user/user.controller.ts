@@ -2,19 +2,27 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Delete, Get, Param, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/user.dto';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from '../auth/guard/role.guard';
-import { Roles } from '../auth/decorator/role.decorator';
+import { Roles } from '../auth/decorator/auth.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @UseGuards(AuthGuard, RoleGuard)
-  // @Roles("ADMIN", "MODERATOR")
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles('ADMIN', 'MODERATOR')
   @Get('all')
   getAllUsers() {
     return this.userService.getAllUsers();

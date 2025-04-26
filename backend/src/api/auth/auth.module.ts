@@ -4,9 +4,10 @@ import { AuthService } from './auth.service';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [OracleModule, JwtModule, ConfigModule],
+  imports: [OracleModule, JwtModule, ConfigModule, UserModule],
   controllers: [AuthController],
   providers: [AuthService],
 })
