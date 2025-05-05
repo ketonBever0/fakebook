@@ -9,6 +9,34 @@ export class AppService {
     return this.db.pool ? 'Connected!' : 'Not Connected!';
   }
 
+  async postTest(body: any) {
+    return body.injectMode
+      ? await this.db.pool
+          .execute(
+            `
+      SELECT * FROM FORBIDDEN_EXPRESSIONS
+      WHERE PATTERN LIKE UPPER('%' || '${body.pattern}' || '%')
+      `,
+            {
+              // pattern: body.pattern,
+            },
+            this.db.jsonFormat,
+          )
+          .then((res) => res.rows)
+      : await this.db.pool
+          .execute(
+            `
+      SELECT * FROM FORBIDDEN_EXPRESSIONS
+      WHERE PATTERN LIKE UPPER('%' || :pattern || '%')
+      `,
+            {
+              pattern: body.pattern,
+            },
+            this.db.jsonFormat,
+          )
+          .then((res) => res.rows);
+  }
+
   async getTime() {
     return await this.db.pool
       .execute(
