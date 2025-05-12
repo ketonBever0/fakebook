@@ -56,8 +56,7 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
 
       alert("Sikeres bejelentkezés!");
 
-      // Redirect to home page and refresh the page
-      navigate("/");
+      navigate("/profile");
       window.location.reload();
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
