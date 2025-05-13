@@ -24,7 +24,7 @@ export default function Messages() {
   // useEffect(() => {
   //   const fetchMessages = async () => {
   //     try {
-  //       const res = await axios.get("/api/messages/all"); // Replace with your backend endpoint
+  //       const res = await axios.get("/api/messages/all");
   //       console.log("Fetched messages:", res.data);
   //       setMessages(res.data);
   //     } catch (err) {

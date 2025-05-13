@@ -44,7 +44,7 @@ export default function Users() {
       }
     };
     fetchUsers();
-  }, []); // Empty dependency array prevents repeated fetches
+  }, []);
 
 
 

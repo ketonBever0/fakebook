@@ -15,6 +15,7 @@ import UserInterests from './pages/UserInterests';
 import ForbiddenExpressions from './pages/ForbiddenExpressions';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage'; // Import profile page
 
 function App() {
   return (
@@ -24,12 +25,8 @@ function App() {
           <Routes>
             <Route path='*' element={<Home />} />
             <Route path='/' element={<Home />} />
-            <Route path='/LoginPage' element={<LoginPage onRegisterClick={function (): void {
-              throw new Error('Function not implemented.');
-            } } />} />
-            <Route path='/RegisterPage' element={<RegisterPage onLoginClick={function (): void {
-              throw new Error('Function not implemented.');
-            } } />} />
+            <Route path='/LoginPage' element={<LoginPage onRegisterClick={() => {}} />} />
+            <Route path='/RegisterPage' element={<RegisterPage onLoginClick={() => {}} />} />
             <Route path='/users' element={<Users />} />
             <Route path='/interests' element={<Interests />} />
             <Route path='/messages' element={<Messages />} />
@@ -40,11 +37,12 @@ function App() {
             <Route path="/group-messages" element={<GroupMessages />} />
             <Route path="/user-groups" element={<UserGroups />} />
             <Route path="/user-interests" element={<UserInterests />} />
-            <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} /> {/* Add ForbiddenExpressions route */}
+            <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} />
+            <Route path="/profile/:userId" element={<ProfilePage />} />
           </Routes>
         </Router>
       </div>
   );
 }
 
-export default App; // Ensure this line exists
+export default App;

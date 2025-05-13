@@ -118,3 +118,47 @@ nav a.active {
         padding: 5px 10px;
     }
 }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background-color: var(--verdigris);
+    color: var(--papaya-whip);
+    padding: 8px 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: var(--yinmn-blue);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: rgba(48, 77, 109, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(8, 189, 189, 0.3);
+}
+
+.dropdown-menu a {
+    color: var(--papaya-whip);
+    text-decoration: none;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgba(8, 189, 189, 0.2);
+}
