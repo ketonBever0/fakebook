@@ -1,3 +1,4 @@
+import { GroupModule } from './api/group/group.module';
 import { CommentModule } from './api/comment/comment.module';
 import { PostModule } from './api/post/post.module';
 import { ObsceneModule } from './api/obscene/obscene.module';
@@ -12,6 +13,7 @@ import { InterestModule } from './api/interest/interest.module';
 
 @Module({
   imports: [
+    GroupModule,
     CommentModule,
     PostModule,
     InterestModule,
