@@ -10,6 +10,7 @@ interface User {
     birthDate: string;
     company?: string;
     role: string;
+    interests?: { id: number; name: string }[];
 }
 
 interface Post {
@@ -39,11 +40,13 @@ const ProfilePage = () => {
     const [newPostText, setNewPostText] = useState<string>("");
     const [newPostImageUrl, setNewPostImageUrl] = useState<string>("");
     const [error, setError] = useState<string>("");
+    const [allInterests, setAllInterests] = useState<{ id: number; name: string }[]>([]);
+    const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
+    const [loadingInterestId, setLoadingInterestId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Get logged-in user
                 const userData = localStorage.getItem("userData");
                 if (!userData) {
                     navigate("/login");
@@ -52,16 +55,13 @@ const ProfilePage = () => {
                 const parsedUserData: User = JSON.parse(userData);
                 setLoggedInUser(parsedUserData);
 
-                // Get the profile being viewed
                 const profileResponse = await axios.get(`http://localhost:3000/api/user/one/${userId}`);
                 setProfileUser(profileResponse.data);
 
-                // Get posts of the viewed profile
                 const postsResponse = await axios.get(`http://localhost:3000/api/post/all`);
                 const userPosts = postsResponse.data.filter((post: Post) => post.authorId === parseInt(userId));
                 setPosts(userPosts);
 
-                // Get comments with author names
                 const commentsData: { [key: number]: Comment[] } = {};
                 await Promise.all(userPosts.map(async (post) => {
                     const commentsResponse = await axios.get(`http://localhost:3000/api/comment/post/${post.id}`);
@@ -73,15 +73,61 @@ const ProfilePage = () => {
                     );
                     commentsData[post.id] = commentsWithAuthors;
                 }));
-
                 setComments(commentsData);
+
+                // Fetch user interests
+                const interestsResponse = await axios.get(`http://localhost:3000/api/interest/user/${userId}`);
+                setProfileUser((prev) => prev ? { ...prev, interests: interestsResponse.data } : null);
+
+                // Set the selected interests based on the fetched user interests
+                setSelectedInterests(interestsResponse.data.map((interest) => interest.id));
+
+                // Fetch all available interests
+                const allInterestsResponse = await axios.get("http://localhost:3000/api/interest");
+                setAllInterests(allInterestsResponse.data);
+
+
             } catch (err) {
-                setError("Nem sikerült lekérni a felhasználói adatokat.");
+                setError("Nem sikerült lekérni az adatokat.");
             }
         };
 
         fetchData();
     }, [userId, navigate]);
+
+    const handleInterestChange = async (interestId: number, isChecked: boolean) => {
+        if (loadingInterestId === interestId) return;
+        setLoadingInterestId(interestId);
+
+        try {
+            if (isChecked) {
+                await axios.post(`http://localhost:3000/api/interest/user/${interestId}`, {
+                    userId: loggedInUser?.id,
+                });
+                // Add interestId to the list of selected interests
+                setSelectedInterests((prev) => [...prev, interestId]);
+            } else {
+                await axios.delete(`http://localhost:3000/api/interest/user/${loggedInUser?.id}/${interestId}`);
+                // Remove interestId from the list of selected interests
+                setSelectedInterests((prev) => prev.filter((id) => id !== interestId));
+            }
+
+            // Optionally update profileUser interests (for UI synchronization)
+            if (profileUser) {
+                const updatedProfileInterests = isChecked
+                    ? [...(profileUser.interests || []), allInterests.find((i) => i.id === interestId)!]
+                    : (profileUser.interests || []).filter((i) => i.id !== interestId);
+                setProfileUser({ ...profileUser, interests: updatedProfileInterests });
+            }
+
+        } catch (err) {
+            console.error("Interest modification error:", err);
+            setError("Nem sikerült módosítani az érdeklődési kört.");
+        } finally {
+            setLoadingInterestId(null);
+        }
+    };
+
 
     const handleNewPostSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -138,6 +184,30 @@ const ProfilePage = () => {
                         <p><strong>Születési dátum:</strong> {profileUser.birthDate}</p>
                         {profileUser.company && <p><strong>Cég:</strong> {profileUser.company}</p>}
                         <p><strong>Szerepkör:</strong> {profileUser.role}</p>
+
+                        <h3>Érdeklődési körök</h3>
+                        <ul>
+                            {profileUser.interests?.map((interest) => (
+                                <li key={interest.id}>{interest.name}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {loggedInUser?.id === parseInt(userId) && (
+                    <div className="profile-edit-interests">
+                        <h3>Szerkeszd az érdeklődési köreidet</h3>
+                        {allInterests.map((interest) => (
+                            <label key={interest.id}>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedInterests.includes(interest.id)}  // This ensures that the checkbox reflects the state
+                                    onChange={(e) => handleInterestChange(interest.id, e.target.checked)}  // Handle user interactions
+                                />
+
+                                {interest.name}
+                            </label>
+                        ))}
                     </div>
                 )}
 
