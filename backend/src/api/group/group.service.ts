@@ -8,14 +8,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
+import { GroupDto } from './dto';
 
 @Injectable()
 export class GroupService {
   constructor(private readonly db: OracleService) {}
-
-  async isGroupOwner(which: number, who: number) {
-    return ((await this.getOneGroup(which)) as { ownerId: number }).ownerId == who;
-  }
 
   async getAllGroups() {
     return await this.db.pool
@@ -91,6 +88,30 @@ export class GroupService {
       });
   }
 
+  async updateGroup(id: number, dto: GroupDto) {
+    const res = (await this.db.pool
+      .execute(
+        `
+      UPDATE GROUPS SET NAME = :name, PRIVATE = :private
+      WHERE ID = :id
+      `,
+        { name: dto.name, private: dto.private ? 1 : 0, id },
+        this.db.autoCommit,
+      )
+      .then((res) => {
+        return res.rowsAffected;
+      })
+      .catch((e: Error) => {
+        if (e.message.includes('GROUPS_UNIQUE')) {
+          throw new ConflictException('Group name already exists!');
+        }
+      })) as number;
+
+    if (res > 0) {
+      return { message: 'Group updated.' };
+    } else throw new NotFoundException('Group not found!');
+  }
+
   async deleteGroup(id: number) {
     return await this.db.pool
       .execute(
@@ -102,7 +123,7 @@ export class GroupService {
       )
       .then((res) => {
         if (res.rowsAffected > 0) {
-          return { message: 'Group deleted' };
+          return { message: 'Group deleted.' };
         } else {
           throw new NotFoundException('Group not found!');
         }

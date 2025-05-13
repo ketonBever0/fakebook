@@ -8,8 +8,10 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  NotFoundException,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
@@ -25,6 +27,7 @@ export class GroupController {
     private readonly memberService: MemberService,
   ) {}
 
+  // GROUPS
   @Get()
   getAllGroups() {
     return this.groupService.getAllGroups();
@@ -46,18 +49,73 @@ export class GroupController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete('one/:id')
-  async deleteGroup(@User() user: AuthModel, @Param('id') id: string) {
-    if (await this.groupService.isGroupOwner(parseInt(id), user.sub)) {
-      return await this.groupService.deleteGroup(parseInt(id));
+  @Put('one/:id')
+  async updateGroup(
+    @User() user: AuthModel,
+    @Param('id') groupId: string,
+    @Body() dto: GroupDto,
+  ) {
+    const intId = parseInt(groupId);
+    const membership = await this.memberService.getMyMembership(
+      intId,
+      user.sub,
+    );
+    if (
+      this.memberService.isGroupOwner(intId, user.sub) ||
+      membership.role == 'ADMIN'
+    ) {
+      return this.groupService.updateGroup(intId, dto);
     } else {
-      throw new ForbiddenException('Only its owner can delete the group!');
+      throw new ForbiddenException(
+        'You have no permission to modify this group!',
+      );
     }
   }
 
   @UseGuards(AuthGuard)
-  @Post('join/:id')
-  joinGroup(@User() user: UserModel, @Param('id') groupId: string) {
-    return this.memberService.joinGroup(user.id, parseInt(groupId));
+  @Delete('one/:id')
+  async deleteGroup(@User() user: AuthModel, @Param('id') id: string) {
+    if (await this.memberService.isGroupOwner(parseInt(id), user.sub)) {
+      return await this.groupService.deleteGroup(parseInt(id));
+    } else {
+      throw new ForbiddenException('Only the owner can delete the group!');
+    }
+  }
+
+  // GROUP_MEMBERS
+  @UseGuards(AuthGuard)
+  @Get('me/:id')
+  async getMyMembership(@User() user: AuthModel, @Param('id') groupId: string) {
+    return {
+      role: (
+        await this.memberService.getMyMembership(parseInt(groupId), user.sub)
+      ).role,
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('me/:id')
+  joinGroup(@User() user: AuthModel, @Param('id') groupId: string) {
+    return this.memberService.joinGroup(user.sub, parseInt(groupId));
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('me/:id')
+  async leaveGroup(@User() user: AuthModel, @Param('id') groupId: string) {
+    if (
+      (await this.memberService.getMyMembership(parseInt(groupId), user.sub))
+        .role == 'OWNER'
+    ) {
+      throw new ForbiddenException(
+        'As a group owner, You need to delete the group, or request your demotion from another group owner!',
+      );
+    }
+    if (
+      await this.memberService.deleteMembership(parseInt(groupId), user.sub)
+    ) {
+      return { message: 'Group left.' };
+    } else {
+      throw new NotFoundException('Group not found!');
+    }
   }
 }
