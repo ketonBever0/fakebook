@@ -23,8 +23,8 @@ import { AuthModel, User, UserModel } from '../auth/decorator/auth.decorator';
 @Controller('group')
 export class GroupController {
   constructor(
-    private readonly groupService: GroupService,
-    private readonly memberService: MemberService,
+      private readonly groupService: GroupService,
+      private readonly memberService: MemberService,
   ) {}
 
   // GROUPS
@@ -42,32 +42,32 @@ export class GroupController {
   @Post('')
   createGroup(@Body() dto: GroupDto, @User() user: AuthModel) {
     return this.groupService.createGroup(
-      dto.name,
-      dto.private ? 1 : 0,
-      user.sub,
+        dto.name,
+        dto.private ? 1 : 0,
+        user.sub,
     );
   }
 
   @UseGuards(AuthGuard)
   @Put('one/:id')
   async updateGroup(
-    @User() user: AuthModel,
-    @Param('id') groupId: string,
-    @Body() dto: GroupDto,
+      @User() user: AuthModel,
+      @Param('id') groupId: string,
+      @Body() dto: GroupDto,
   ) {
     const intId = parseInt(groupId);
     const membership = await this.memberService.getMyMembership(
-      intId,
-      user.sub,
+        intId,
+        user.sub,
     );
     if (
-      this.memberService.isGroupOwner(intId, user.sub) ||
-      membership.role == 'ADMIN'
+        this.memberService.isGroupOwner(intId, user.sub) ||
+        membership.role == 'ADMIN'
     ) {
       return this.groupService.updateGroup(intId, dto);
     } else {
       throw new ForbiddenException(
-        'You have no permission to modify this group!',
+          'You have no permission to modify this group!',
       );
     }
   }
@@ -88,7 +88,7 @@ export class GroupController {
   async getMyMembership(@User() user: AuthModel, @Param('id') groupId: string) {
     return {
       role: (
-        await this.memberService.getMyMembership(parseInt(groupId), user.sub)
+          await this.memberService.getMyMembership(parseInt(groupId), user.sub)
       ).role,
     };
   }
@@ -103,15 +103,15 @@ export class GroupController {
   @Delete('me/:id')
   async leaveGroup(@User() user: AuthModel, @Param('id') groupId: string) {
     if (
-      (await this.memberService.getMyMembership(parseInt(groupId), user.sub))
-        .role == 'OWNER'
+        (await this.memberService.getMyMembership(parseInt(groupId), user.sub))
+            .role == 'OWNER'
     ) {
       throw new ForbiddenException(
-        'As a group owner, You need to delete the group, or request your demotion from another group owner!',
+          'As a group owner, You need to delete the group, or request your demotion from another group owner!',
       );
     }
     if (
-      await this.memberService.deleteMembership(parseInt(groupId), user.sub)
+        await this.memberService.deleteMembership(parseInt(groupId), user.sub)
     ) {
       return { message: 'Group left.' };
     } else {
