@@ -14,10 +14,23 @@ import {
 import { FriendService } from './friend.service';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { AuthModel, User } from '../auth/decorator/auth.decorator';
+import { UserService } from '../user/user.service';
 
 @Controller('friend')
 export class FriendController {
-  constructor(private readonly friendService: FriendService) {}
+  constructor(
+    private readonly friendService: FriendService,
+    private readonly userService: UserService,
+  ) {}
+
+  @UseGuards(AuthGuard)
+  @Get('suggest/company')
+  async suggestFriendsByCompany(@User() user: AuthModel) {
+    const company = (
+      (await this.userService.getOneUser(user.sub)) as { company: string }
+    ).company;
+    return this.friendService.suggestFriendsByCompany(user.sub, company);
+  }
 
   @UseGuards(AuthGuard)
   @Get('user/friend')

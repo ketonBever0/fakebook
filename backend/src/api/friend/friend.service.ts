@@ -14,6 +14,35 @@ import { OracleService } from 'src/oracle/oracle.service';
 export class FriendService {
   constructor(private readonly db: OracleService) {}
 
+  async suggestFriendsByCompany(userId: number, company: string) {
+    return await this.db.pool
+      .execute(
+        `
+      SELECT DISTINCT U.ID, U.FULLNAME
+      FROM FAKEBOOK.USERS U
+      LEFT JOIN FAKEBOOK.FRIENDS F ON (U.ID = F.SENDER_ID OR U.ID = F.RECEIVER_ID)
+      WHERE LOWER(U.COMPANY) = LOWER(:company)
+      AND U.ID NOT IN (
+          SELECT CASE
+              WHEN F.SENDER_ID = :userId THEN F.RECEIVER_ID
+              ELSE F.SENDER_ID
+          END
+          FROM FAKEBOOK.FRIENDS F
+          WHERE :userId IN (F.SENDER_ID, F.RECEIVER_ID)
+      )
+      ORDER BY (
+          SELECT COUNT(*)
+          FROM FAKEBOOK.FRIENDS F2
+          WHERE (F2.SENDER_ID = U.ID OR F2.RECEIVER_ID = U.ID)
+          AND (F2.SENDER_ID = :userId OR F2.RECEIVER_ID = :userId)
+      ) DESC
+      `,
+        { company, userId },
+        this.db.jsonFormat,
+      )
+      .then((res) => res.rows);
+  }
+
   async getMyFriends(me: number) {
     return await this.db.pool
       .execute(
