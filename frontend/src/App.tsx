@@ -15,7 +15,9 @@ import UserInterests from './pages/UserInterests';
 import ForbiddenExpressions from './pages/ForbiddenExpressions';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage'; // Import profile page
+import ProfilePage from './pages/ProfilePage';
+import GroupsPage from './pages/GroupsPage';
+
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
             <Route path="/user-interests" element={<UserInterests />} />
             <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/my-groups" element={<GroupsPage />} />
           </Routes>
         </Router>
       </div>

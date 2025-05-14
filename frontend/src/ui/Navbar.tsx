@@ -22,7 +22,8 @@ export default function Navbar() {
                 )}
                 {isLoggedIn && (
                     <>
-                        <Link to={`/profile/${userData?.id}`}>My Profile</Link> {/* Dynamic Profile Link */}
+                        <Link to={`/profile/${userData?.id}`}>My Profile</Link>
+                        <Link to={"/my-groups"}>Csoportok</Link>
                         {isAdmin && (
                             <div className="dropdown">
                                 <button
