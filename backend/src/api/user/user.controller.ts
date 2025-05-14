@@ -20,8 +20,6 @@ import { Roles } from '../auth/decorator/auth.decorator';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @UseGuards(AuthGuard)
   @Get('all')
   getAllUsers() {
     return this.userService.getAllUsers();

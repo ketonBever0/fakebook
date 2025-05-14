@@ -61,6 +61,12 @@
     border-left: 6px solid var(--verdigris);
     font-style: italic;
 }
+.group-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ffd700;
+    transition: color 0.3s ease;
+}
 
 .error {
     color: rgba(253, 240, 213, 0.8);
@@ -118,17 +124,40 @@
 
 .create-group-form {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    margin: 20px;
+    flex-wrap: wrap;
+
+}
+
+.create-group-form p{
+    font-size: 24px;
+    color: #ffd700;
+
 }
 
 .create-group-form input {
     flex-grow: 1;
     background-color: rgba(48, 77, 109, 0.15);
     border: 1px solid rgba(253, 240, 213, 0.2);
-    padding: 12px;
-    border-radius: 8px;
-    color: var(--papaya-whip);
+    padding: 14px;
+    border-radius: 10px;
+    color: #f3eac8;
     font-size: 1rem;
+}
+
+.create-group-form button {
+    background: #e76f51;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.create-group-form button:hover {
+    background: #d64933;
 }
 

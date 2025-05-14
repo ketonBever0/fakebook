@@ -72,7 +72,6 @@ const GroupListPage: React.FC = () => {
             await axios.post(`http://localhost:3000/api/group/me/${groupId}`, {}, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
             });
-            alert("Request sent or joined!");
             window.location.reload();
         } catch (error) {
             console.error("Failed to join group", error);
@@ -87,10 +86,33 @@ const GroupListPage: React.FC = () => {
                 { name: newGroupName, private: isPrivate },
                 { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } }
             );
-            alert("Group created successfully!");
             window.location.reload();
         } catch (error) {
             console.error("Failed to create group", error);
+        }
+    };
+
+    const handleLeaveGroup = async (groupId: number) => {
+        try {
+            await axios.delete(`http://localhost:3000/api/group/me/${groupId}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+            });
+            window.location.reload();
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to leave group");
+            console.error("Error leaving group", error);
+        }
+    };
+
+    const handleDeleteGroup = async (groupId: number) => {
+        try {
+            await axios.delete(`http://localhost:3000/api/group/one/${groupId}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+            });
+            window.location.reload();
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to delete group");
+            console.error("Error deleting group", error);
         }
     };
 
@@ -116,27 +138,26 @@ const GroupListPage: React.FC = () => {
                             checked={isPrivate}
                             onChange={(e) => setIsPrivate(e.target.checked)}
                         />
-                        Private
+                        <p>Private</p>
                     </label>
                     <button type="submit">Create Group</button>
                 </form>
 
-                {/* 🔹 GROUP LIST */}
                 <ul className="group-list">
-                    {uniqueGroups.map((group) => (
+                    {groups.map((group) => (
                         <li key={group.id} className="group-item">
-                            <strong>{group.name}</strong> - {group.private ? "Private" : "Public"} - {group.memberCount} members
+                            <a href={`/group/${group.id}`} className="group-link">{group.name}</a>
+                            <span>{group.private ? "Private" : "Public"} - {group.memberCount} members</span>
                             <div>
-                                {memberships[group.id]?.role ? (
-                                    memberships[group.id].role === "PENDING" ? (
-                                        <button disabled>Pending...</button>
-                                    ) : memberships[group.id].role === "NOT_MEMBER" ? (
-                                        <button onClick={() => handleJoin(group.id)}>Join</button>
-                                    ) : (
-                                        <button disabled>View Group ({memberships[group.id].role})</button>
-                                    )
-                                ) : (
+                                {memberships[group.id]?.role === "NOT_MEMBER" ? (
                                     <button onClick={() => handleJoin(group.id)}>Join</button>
+                                ) : memberships[group.id]?.role === "OWNER" ? (
+                                    <>
+                                        <button onClick={() => handleLeaveGroup(group.id)}>Leave Group</button>
+                                        <button onClick={() => handleDeleteGroup(group.id)}>Delete Group</button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => handleLeaveGroup(group.id)}>Leave Group</button>
                                 )}
                             </div>
                         </li>

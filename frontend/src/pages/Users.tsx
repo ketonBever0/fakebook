@@ -17,188 +17,123 @@ export default function Users() {
     role?: string;
   };
 
-
   const [users, setUsers] = useState<UserType[]>([]);
   const [formData, setFormData] = useState({
     email: "",
     fullname: "",
     password: "",
-    confirmPassword: "", // For confirmation
+    confirmPassword: "",
     birthDate: "",
     company: "",
   });
 
-
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<UserType | null>(null);
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/all");
-        console.log("Fetched users:", res.data); // Debugging logs
+        const res = await axios.get("http://localhost:3000/api/user/all", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUsers(res.data);
       } catch (err) {
-        console.error("Error fetching users:", err);
         alert("Failed to fetch users.");
+        console.error("Error fetching users:", err);
       }
     };
+
     fetchUsers();
   }, []);
 
-
-
-  const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-      isEditing: boolean = false
-  ) => {
-    try {
-      if (isEditing && editFormData) {
-        const updatedData = {
-          ...editFormData,
-          [e.target.name]: e.target.value,
-        };
-        setEditFormData(updatedData);
-        console.log("Edit Form Data Updated:", updatedData); // Debugging log
-      } else {
-        const updatedFormData = {
-          ...formData,
-          [e.target.name]: e.target.value,
-        };
-        setFormData(updatedFormData);
-        console.log("New Form Data Updated:", updatedFormData); // Debugging log
-      }
-    } catch (err) {
-      console.error("Error handling input changes:", err);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, isEditing = false) => {
+    if (isEditing && editFormData) {
+      setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
 
   const addUser = async () => {
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match. Please try again.");
-      return; // Abort submission
+      return;
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/register", {
-        email: formData.email,
-        fullname: formData.fullname,
-        password: formData.password, // Only send one password to the backend
-        birthDate: formData.birthDate,
-        company: formData.company,
-      });
+      await axios.post(
+          "http://localhost:3000/api/auth/register",
+          {
+            email: formData.email,
+            fullname: formData.fullname,
+            password: formData.password,
+            birthDate: format(new Date(formData.birthDate), "yyyy-MM-dd"),
+            company: formData.company,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      alert(res.data.message);
-
-      // Refetch all users to update the table
-      const fetchRes = await axios.get("http://localhost:3000/api/user/all");
-      setUsers(fetchRes.data);
-
-      // Reset the form fields
-      setFormData({
-        email: "",
-        fullname: "",
-        password: "",
-        confirmPassword: "",
-        birthDate: "",
-        company: "",
-      });
+      alert("User added successfully!");
+      setUsers((prev) => [...prev, { id: Date.now(), ...formData }]);
+      setFormData({ email: "", fullname: "", password: "", confirmPassword: "", birthDate: "", company: "" });
     } catch (err) {
+      alert(err.response?.data?.message || "Failed to add user.");
       console.error("Error adding user:", err);
+    }
+  };
 
-      if (err.response) {
-        const { status, data } = err.response;
+  const saveUser = async (id: number) => {
+    if (!editFormData) return;
 
-        if (status === 400) {
-          alert(`Helytelen adatok: ${data.message.join(", ")}`);
-        } else if (status === 409) {
-          alert(`E-mail cím foglalt: ${data.message}`);
-        } else if (status === 406) {
-          alert(`Hiba: ${data.message}`);
-        } else {
-          alert("Ismeretlen hiba történt. Próbáld újra!");
-        }
-      } else {
-        alert("Kapcsolódási hiba. Próbáld később!");
-      }
+    try {
+      await axios.put(
+          `http://localhost:3000/api/user/one/${id}`,
+          {
+            email: editFormData.email,
+            fullname: editFormData.fullname,
+            birthDate: format(new Date(editFormData.birthDate), "yyyy-MM-dd"),
+            company: editFormData.company,
+            role: editFormData.role,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setUsers((prev) =>
+          prev.map((user) =>
+              user.id === id ? { ...user, email: editFormData.email, fullname: editFormData.fullname, birthDate: editFormData.birthDate, company: editFormData.company, role: editFormData.role } : user
+          )
+      );
+      cancelEditing();
+      alert("User updated successfully!");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update user.");
+      console.error("Error updating user:", err);
+    }
+  };
+
+  const deleteUser = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/user/one/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+      alert("User deleted successfully!");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete user.");
+      console.error("Error deleting user:", err);
     }
   };
 
   const startEditing = (user: UserType) => {
     setEditingUserId(user.id);
     setEditFormData({ ...user });
-    console.log("Editing User Data:", user); // Debugging log
-  };
-
-  const saveUser = async (id: number) => {
-    try {
-      if (editFormData) {
-        console.log("Data to be Sent to Backend:", editFormData); // Debugging log
-
-        const res = await axios.put(`http://localhost:3000/api/user/one/${id}`, {
-          email: editFormData.email,
-          fullname: editFormData.fullname,
-          birthDate: format(new Date(editFormData.birthDate), "yyyy-MM-dd"),
-          company: editFormData.company,
-          role: editFormData.role,
-        });
-
-        console.log("PUT request sent with Axios");
-        console.log("Updated User from Backend:", res.data);
-
-        const fetchRes = await axios.get("http://localhost:3000/api/user/all");
-        setUsers(fetchRes.data);
-
-        cancelEditing();
-      }
-    } catch (err) {
-      console.error("Error during PUT request:", err);
-
-      if (err.response) {
-        const { status, data } = err.response;
-        console.warn(`Backend responded with status ${status}:`, data);
-
-        if (status === 400) {
-          alert(`Invalid data: ${data.message.join(", ")}`);
-        } else if (status === 409) {
-          alert(`Email address already in use: ${data.message}`);
-        } else if (status === 406) {
-          alert(`Error: ${data.message}`);
-        } else {
-          alert("An unknown error occurred. Please try again.");
-        }
-      } else if (err.request) {
-        console.error("The request was made but no response was received:", err.request);
-        alert("Connection error. The server may be unavailable.");
-      } else {
-        console.error("Error setting up the PUT request:", err.message);
-        alert(`Unexpected error: ${err.message}`);
-      }
-    }
   };
 
   const cancelEditing = () => {
     setEditingUserId(null);
     setEditFormData(null);
-  };
-
-  const deleteUser = async (id: number) => {
-    try {
-      const response = await axios.delete(`http://localhost:3000/api/user/one/${id}`);
-      console.log("User deleted:", response.data.message);
-
-      const fetchResponse = await axios.get("http://localhost:3000/api/user/all");
-      setUsers(fetchResponse.data);
-    } catch (err: any) {
-      console.error("Error deleting user:", err);
-
-      if (err.response) {
-        const { status, data } = err.response;
-        alert(data.message || "Error deleting user");
-      } else {
-        alert("Connection error. Please try again later.");
-      }
-    }
   };
 
   return (
