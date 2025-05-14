@@ -24,6 +24,7 @@ export default function Navbar() {
                     <>
                         <Link to={`/profile/${userData?.id}`}>My Profile</Link>
                         <Link to={"/my-groups"}>Csoportok</Link>
+                        <Link to={"/my-friends"}>Barátok</Link>
                         {isAdmin && (
                             <div className="dropdown">
                                 <button

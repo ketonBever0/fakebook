@@ -1,0 +1,115 @@
+/* FriendsPage.css */
+:root {
+    --yinmn-blue: #304d6dff;
+    --verdigris: #08bdbdff;
+    --papaya-whip: #fdf0d5ff;
+    --amaranth: #da3e52ff;
+    --smoky-black: #100c0b0ff;
+}
+
+.friends-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--papaya-whip);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.friends-container h2 {
+    font-size: 1.8rem;
+    color: var(--smoky-black);
+    margin-bottom: 16px;
+}
+
+.error {
+    color: var(--amaranth);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.users-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.user-item a {
+    text-decoration: none;
+    color: var(--smoky-black);
+    font-weight: 500;
+}
+
+.user-item a:hover {
+    color: var(--yinmn-blue);
+}
+
+.user-item button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.user-item button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.user-item button:disabled {
+    background: linear-gradient(135deg, #ccc, #aaa);
+    color: #fff;
+    cursor: not-allowed;
+}
+
+/* Button variants */
+.user-item button:nth-of-type(1) {
+    /* default Send Request */
+    background: linear-gradient(135deg, var(--verdigris), var(--yinmn-blue));
+    color: #fff;
+}
+
+.user-item button:nth-of-type(1):disabled {
+    background: linear-gradient(135deg, #ccc, #aaa);
+}
+
+.user-item button:nth-of-type(1):not(:disabled) {
+    box-shadow: 0 2px 8px rgba(8, 189, 189, 0.3);
+}
+
+.user-item button:nth-of-type(2) {
+    /* secondary action (Accept / Unfriend) */
+    background: var(--amaranth);
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .friends-container {
+        margin: 20px;
+        padding: 16px;
+    }
+
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .user-item button {
+        width: 100%;
+        text-align: center;
+    }
+}

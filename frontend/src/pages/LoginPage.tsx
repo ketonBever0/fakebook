@@ -54,8 +54,6 @@ const LoginPage = ({ onRegisterClick }: { onRegisterClick: () => void }) => {
         localStorage.removeItem("userEmail");
       }
 
-      alert("Sikeres bejelentkezés!");
-
       navigate("/profile");
       window.location.reload();
     } catch (err) {

@@ -1,200 +1,220 @@
-.profile-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Adjusted for better alignment */
-    min-height: 100vh;
-    padding: 40px;
+/* FriendsPage.css */
+:root {
+    --yinmn-blue: #304d6dff;
+    --verdigris: #08bdbdff;
+    --papaya-whip: #fdf0d5ff;
+    --amaranth: #da3e52ff;
+    --smoky-black: #100c0b0ff;
 }
 
+/* General container style */
+.profile-container{
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--papaya-whip);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile Card */
 .profile-card {
-    background-color: rgba(16, 12, 11, 0.85);
+    background-color: var(--papaya-whip);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 1000px; /* Increased for better desktop readability */
     padding: 40px;
-    position: relative;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Profile Header */
-.profile-header {
+/* Headers */
+.profile-header h1,
+.friends-container h2 {
+    font-size: 2rem;
+    color: var(--smoky-black);
+    margin-bottom: 16px;
     text-align: center;
-    margin-bottom: 30px;
-}
-
-.profile-header h1 {
-    color: var(--papaya-whip);
-    font-size: 2.5rem; /* Increased for better readability */
-    margin-bottom: 15px;
 }
 
 /* Profile Details */
 .profile-details {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
+    margin-bottom: 30px;
 }
-
 .profile-details p {
-    color: rgba(253, 240, 213, 0.85);
-    font-size: 1.2rem; /* Increased for visibility */
+    color: rgba(16, 12, 11, 0.75);
+    font-size: 1.1rem;
 }
 
-/* Posts Grid Layout */
+/* Posts grid for profile */
 .profile-posts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Improved responsiveness */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
 
-/* Individual Post Styling */
 .post {
     background-color: rgba(48, 77, 109, 0.85);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     color: var(--papaya-whip);
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease;
 }
-
 .post:hover {
     transform: translateY(-5px);
 }
-
 .post img {
-    margin-top: 10px;
     max-width: 100%;
     border-radius: 8px;
-}
-
-/* Comments Styling */
-.post-comments {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: rgba(48, 77, 109, 0.85);
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.post-comments h3 {
-    color: var(--papaya-whip);
-    font-size: 1.2rem;
-}
-
-.comment {
-    color: var(--papaya-whip);
-    font-size: 1.1rem; /* Improved readability */
-    padding: 5px;
-}
-
-/* Post Creation Form */
-.new-post-form {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.new-post-form textarea,
-.new-post-form input {
-    background-color: rgba(48, 77, 109, 0.15);
-    border: 1px solid rgba(253, 240, 213, 0.2);
-    padding: 15px;
-    border-radius: 12px;
-    color: var(--papaya-whip);
-    font-size: 1.1rem;
-    width: 100%;
-}
-
-.new-post-form textarea:focus,
-.new-post-form input:focus {
-    outline: none;
-    border-color: var(--verdigris);
-}
-
-/* Button Styling */
-.profile-button {
-    margin-top: 15px;
-    background: linear-gradient(135deg, var(--verdigris), var(--yinmn-blue));
-    color: var(--papaya-whip);
-    border: none;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 1.2rem; /* Adjusted for desktop */
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.profile-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(8, 189, 189, 0.4);
-}
-
-/* Responsive Tweaks */
-@media (max-width: 768px) {
-    .profile-card {
-        max-width: 90%;
-        padding: 30px;
-    }
-
-    .profile-header h1 {
-        font-size: 2rem;
-    }
-
-    .profile-posts {
-        grid-template-columns: 1fr; /* Stack posts in smaller screens */
-    }
-
-    .profile-button {
-        font-size: 1rem;
-        padding: 12px;
-    }
-}
-
-.comment-form {
-    display: flex;
-    gap: 10px;
     margin-top: 10px;
-}
-
-.comment-form input {
-    flex-grow: 1;
-    background-color: rgba(48, 77, 109, 0.15);
-    border: 1px solid rgba(253, 240, 213, 0.2);
-    padding: 10px;
-    border-radius: 8px;
-    color: var(--papaya-whip);
-    font-size: 1rem;
-}
-
-.comment-form button {
-    background: var(--verdigris);
-    color: var(--papaya-whip);
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.comment-form button:hover {
-    background: var(--yinmn-blue);
 }
 .post-date {
     font-size: 0.85rem;
     color: rgba(253, 240, 213, 0.7);
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
+/* Comments inside posts */
+.post-comments {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: rgba(48, 77, 109, 0.75);
+    border-radius: 8px;
+}
+.post-comments h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+.comment {
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
 .comment-date {
     font-size: 0.75rem;
     color: rgba(253, 240, 213, 0.6);
-    margin-left: 10px;
+    margin-left: 8px;
 }
 
+/* New post and comment forms */
+.new-post-form,
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+.new-post-form input,
+.new-post-form textarea,
+.comment-form input {
+    background-color: rgba(48, 77, 109, 0.15);
+    border: 1px solid rgba(253, 240, 213, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+.new-post-form input:focus,
+.new-post-form textarea:focus,
+.comment-form input:focus {
+    outline: none;
+    border-color: var(--verdigris);
+    box-shadow: 0 0 0 2px rgba(8, 189, 189, 0.2);
+}
 
+.comment-form button,
+.profile-button {
+    align-self: flex-start;
+    background: linear-gradient(135deg, var(--verdigris), var(--yinmn-blue));
+    color: var(--papaya-whip);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.comment-form button:hover,
+.profile-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(8, 189, 189, 0.4);
+}
+
+/* Users list (Friends page) */
+.users-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+.user-item a {
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--smoky-black);
+}
+.user-item a:hover {
+    color: var(--yinmn-blue);
+}
+.user-item button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.user-item button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+.user-item button:disabled {
+    background: linear-gradient(135deg, #ccc, #aaa);
+    color: #fff;
+    cursor: not-allowed;
+}
+.user-item button:nth-of-type(1) {
+    background: linear-gradient(135deg, var(--verdigris), var(--yinmn-blue));
+    color: #fff;
+}
+.user-item button:nth-of-type(2) {
+    background: var(--amaranth);
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-container,
+    .friends-container {
+        margin: 20px;
+        padding: 16px;
+    }
+    .profile-posts {
+        grid-template-columns: 1fr;
+    }
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .user-item button {
+        width: 100%;
+    }
+}
+
+.comment-author {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ffd700;
+    transition: color 0.3s ease;
+}

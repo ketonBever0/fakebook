@@ -17,6 +17,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import GroupsPage from './pages/GroupsPage';
+import FriendsPage from './pages/FriendsPage';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
             <Route path="/forbidden-expressions" element={<ForbiddenExpressions />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/my-groups" element={<GroupsPage />} />
+            <Route path="/my-friends" element={<FriendsPage />} />
           </Routes>
         </Router>
       </div>
