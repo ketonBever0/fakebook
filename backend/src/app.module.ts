@@ -1,3 +1,4 @@
+import { FriendModule } from './api/friend/friend.module';
 import { GroupModule } from './api/group/group.module';
 import { CommentModule } from './api/comment/comment.module';
 import { PostModule } from './api/post/post.module';
@@ -13,6 +14,7 @@ import { InterestModule } from './api/interest/interest.module';
 
 @Module({
   imports: [
+    FriendModule,
     GroupModule,
     CommentModule,
     PostModule,

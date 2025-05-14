@@ -39,6 +39,7 @@ export class UserService {
       `
       SELECT ID AS "id", EMAIL AS "email", FULLNAME AS "fullname", BIRTH_DATE AS "birthDate", COMPANY AS "company", ROLE AS "role"
       FROM USERS
+      WHERE NOT ID = 0
       `,
       {},
       this.db.jsonFormat,

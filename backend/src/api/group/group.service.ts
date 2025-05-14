@@ -20,9 +20,8 @@ export class GroupService {
         `
       SELECT G.ID "id", G.NAME "name", G.PRIVATE "private", (
         SELECT COUNT(IU.USER_ID) FROM FAKEBOOK.USER_GROUPS IU
-        WHERE GROUP_ID = G.ID) "memberCount", U.USER_ID "ownerId"
+        WHERE GROUP_ID = G.ID) "memberCount"
       FROM FAKEBOOK.GROUPS G
-      JOIN FAKEBOOK.USER_GROUPS U ON G.ID = U.GROUP_ID
       `,
         {},
         this.db.jsonFormat,
@@ -77,8 +76,8 @@ export class GroupService {
     return await this.db.pool
       .execute(
         `
-        INSERT INTO USER_GROUPS (ROLE, PENDING, USER_ID, GROUP_ID)
-        VALUES ('OWNER', 0, :userId, :groupId)
+        INSERT INTO USER_GROUPS (ROLE, USER_ID, GROUP_ID)
+        VALUES ('OWNER', :userId, :groupId)
         `,
         { userId: userId, groupId: newGroupId as number },
         this.db.autoCommit,

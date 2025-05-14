@@ -6,9 +6,10 @@ https://docs.nestjs.com/modules
 
 import { Module } from '@nestjs/common';
 import { OracleModule } from 'src/oracle/oracle.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [OracleModule],
+  imports: [OracleModule, JwtModule],
   controllers: [PostController],
   providers: [PostService],
 })
