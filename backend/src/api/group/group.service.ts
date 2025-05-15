@@ -18,10 +18,10 @@ export class GroupService {
     return await this.db.pool
         .execute(
             `
-      SELECT G.ID "id", G.NAME "name", G.PRIVATE "private", (
-        SELECT COUNT(IU.USER_ID) FROM FAKEBOOK.USER_GROUPS IU
-        WHERE GROUP_ID = G.ID) "memberCount"
-      FROM FAKEBOOK.GROUPS G
+      SELECT G.ID "id", G.NAME "name", G.PRIVATE "private", COUNT(U.USER_ID) AS "memberCount"
+        FROM GROUPS G
+        LEFT JOIN USER_GROUPS U ON G.ID = U.GROUP_ID
+        GROUP BY G.ID, G.NAME, G.PRIVATE
       `,
             {},
             this.db.jsonFormat,
@@ -33,11 +33,10 @@ export class GroupService {
     return await this.db.pool
         .execute(
             `
-      SELECT G.ID "id", G.NAME "name", G.PRIVATE "private", U.FULLNAME "ownerName", U.EMAIL "ownerEmail", U.ID "ownerId"
+      SELECT G.ID "id", G.NAME "name", G.PRIVATE "private", GROUP_MEMBER_COUNT_FN(:id) "memberCount"
       FROM GROUPS G
-      JOIN USER_GROUPS UG ON G.ID = UG.GROUP_ID
-      JOIN USERS U ON U.ID = UG.USER_ID
-      WHERE G.ID = :id AND UG.ROLE = 'OWNER'
+      LEFT JOIN USER_GROUPS UG ON G.ID = UG.GROUP_ID
+      WHERE G.ID = :id
       `,
             { id },
             this.db.jsonFormat,

@@ -87,12 +87,9 @@ export class InterestService {
     return await this.db.pool
         .execute(
             `
-      SELECT
-        I.ID   AS "id",
-        I.NAME AS "name"
+      SELECT I.ID   AS "id", I.NAME AS "name"
       FROM INTERESTS I
-      JOIN USER_INTERESTS UI
-        ON UI.INTEREST_ID = I.ID
+      JOIN USER_INTERESTS UI ON UI.INTEREST_ID = I.ID
       WHERE UI.USER_ID = :userId
       `,
             { userId },
