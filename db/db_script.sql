@@ -6,7 +6,7 @@
 -- Az ID- és bizonyos dátum mezők szándékosan vannak kihagyva demonstrálva a szekvenciák és a SYSDATE megfelelő működését
 
 
-DROP USER FAKEBOOK CASCADE;
+-- DROP USER FAKEBOOK CASCADE;
 -- ^ Ha újra akarod generálni a sémát vedd ki a kommentet a fenti sorból,
 -- DE előtte állítsd le a backendet
 
@@ -578,6 +578,16 @@ CREATE OR REPLACE FUNCTION FAKEBOOK.GROUP_MEMBER_COUNT_FN (in_group_id IN NUMBER
 RETURN NUMBER IS
 	member_count NUMBER;
 
+CREATE OR REPLACE FUNCTION FAKEBOOK.GROUP_MEMBER_COUNT_FN (in_group_id IN NUMBER)
+RETURN NUMBER IS
+	member_count NUMBER;
+BEGIN
+	SELECT COUNT(UG.USER_ID)
+		INTO member_count
+		FROM FAKEBOOK.USER_GROUPS UG
+        WHERE UG.GROUP_ID = in_group_id;
+	RETURN member_count;
+END;
 
 CREATE OR REPLACE FUNCTION FAKEBOOK.GROUP_MEMBER_COUNT_FN (in_group_id IN NUMBER)
 RETURN NUMBER IS
