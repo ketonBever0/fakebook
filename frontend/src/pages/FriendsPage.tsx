@@ -49,8 +49,7 @@ const FriendsPage: React.FC = () => {
             });
             const sugData: User[] = sugDataRaw.map(u => ({ id: u.ID ?? u.id, fullname: u.FULLNAME ?? u.fullname }));
             console.log('Suggestions fetched:', sugData);
-            // filter out system and current user
-            const filteredSug = sugData.filter(u => u.id !== userData.id && u.fullname !== 'Fakebook System');
+            const filteredSug = sugData.filter(u => u.fullname !== 'Fakebook System');
             setSuggestions(filteredSug);
         } catch (err: any) {
             console.error('Error loading data', err);
@@ -62,7 +61,28 @@ const FriendsPage: React.FC = () => {
 
     useEffect(() => { loadData(); }, [token]);
 
-    const sendRequest = async (id: number) => { await axios.post(`${apiBase}/friend/user/friend/${id}`, {}, { headers: { Authorization: `Bearer ${token}` } }); loadData(); };
+    const sendRequest = async (id: number) => {
+        try {
+            await axios.post(`${apiBase}/friend/user/friend/${id}`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            loadData();
+        } catch (err: any) {
+            const msg = err.response?.data?.message;
+            console.error('Error sending request:', err);
+
+            if (msg === 'Friend already added!') {
+                alert('This user is already your friend.');
+            } else if (msg === 'You cannot add yourself as a friend!') {
+                alert('You cannot send a friend request to yourself.');
+            } else if (msg === 'Requested user not found!') {
+                alert('This user does not exist.');
+            } else {
+                alert(msg || 'Failed to send friend request.');
+            }
+        }
+    };
+
     const acceptRequest = async (id: number) => { await axios.put(`${apiBase}/friend/user/friend/${id}`, {}, { headers: { Authorization: `Bearer ${token}` } }); loadData(); };
     const declineRequest = async (id: number) => { await axios.delete(`${apiBase}/friend/user/friend/${id}`, { headers: { Authorization: `Bearer ${token}` } }); loadData(); };
     const unfriend = async (id: number) => { await axios.delete(`${apiBase}/friend/user/friend/${id}`, { headers: { Authorization: `Bearer ${token}` } }); loadData(); };
@@ -114,11 +134,14 @@ const FriendsPage: React.FC = () => {
                                             <button className="decline-btn" onClick={() => declineRequest(u.id)}>Decline</button>
                                         </>
                                     )}
-                                    {!isFriend && !isIncoming && (
-                                        <button className="send-btn" onClick={() => sendRequest(u.id)} disabled={isSent}>
-                                            {isSent ? 'Pending' : 'Send Request'}
-                                        </button>
-                                    )}
+                                    <button className="send-btn" onClick={() => sendRequest(u.id)}>
+                                        Send Request
+                                    </button>
+                                    {/*{!isFriend && !isIncoming && (*/}
+                                    {/*    <button className="send-btn" onClick={() => sendRequest(u.id)} disabled={isSent}>*/}
+                                    {/*        {isSent ? 'Pending' : 'Send Request'}*/}
+                                    {/*    </button>*/}
+                                    {/*)}*/}
                                 </div>
                             </li>
                         );

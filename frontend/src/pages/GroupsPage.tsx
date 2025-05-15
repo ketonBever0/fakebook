@@ -98,11 +98,23 @@ const GroupListPage: React.FC = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
             });
             window.location.reload();
-        } catch (error) {
-            alert(error.response?.data?.message || "Failed to leave group");
-            console.error("Error leaving group", error);
+        } catch (error: any) {
+            const message = error.response?.data?.message;
+
+            if (message === 'As a group owner, You need to delete the group, or request your demotion from another group owner!') {
+                alert('You are the owner of this group. You must delete the group or be demoted by another owner before leaving.');
+            } else if (message === 'Group not found!') {
+                alert('This group no longer exists.');
+            } else if (message === 'Cannot remove the owner of the group!') {
+                alert('You cannot remove the group owner.');
+            } else {
+                alert(message || 'Failed to leave group');
+            }
+
+            console.error("Error leaving group:", error);
         }
     };
+
 
     const handleDeleteGroup = async (groupId: number) => {
         try {
@@ -123,7 +135,6 @@ const GroupListPage: React.FC = () => {
                     <h2>Group List</h2>
                 </div>
 
-                {/* 🔹 CREATE GROUP FORM */}
                 <form className="create-group-form" onSubmit={handleCreateGroup}>
                     <input
                         type="text"

@@ -143,8 +143,16 @@ const ProfilePage = () => {
             setPosts([{ id: Date.now(), text: newPostText, imageUrl: newPostImageUrl, authorId: loggedInUser.id }, ...posts]);
             setNewPostText("");
             setNewPostImageUrl("");
-        } catch {
-            setError("Nem sikerült létrehozni a bejegyzést.");
+        } catch (error: any) {
+            const message = error.response?.data?.message;
+
+            if (message === "Obscene expression found in post!") {
+                alert("A bejegyzés obszcén kifejezést tartalmaz!");
+            } else {
+                alert("Nem sikerült létrehozni a bejegyzést.");
+            }
+
+            console.error("Post creation failed:", error);
         }
     };
 
@@ -163,8 +171,17 @@ const ProfilePage = () => {
             });
 
             setNewCommentText({ ...newCommentText, [postId]: "" });
-        } catch {
-            setError("Nem sikerült létrehozni a hozzászólást.");
+        } catch (error: any) {
+            const message = error.response?.data?.message;
+
+            if (message === 'Post not found!') {
+                alert('A hozzászólni kívánt bejegyzés nem található!');
+            } else if (message === 'Obscene expression found in comment!') {
+                alert('A hozzászólás obszcén kifejezést tartalmaz!');
+            } else {
+                alert("Nem sikerült létrehozni a hozzászólást.");
+            }
+            console.error("Error creating comment:", error);
         }
     };
 
