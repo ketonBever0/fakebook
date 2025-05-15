@@ -3,6 +3,7 @@ https://docs.nestjs.com/providers#services
 */
 
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -76,6 +77,13 @@ export class FriendService {
         if (e.message.includes('FRIEND_ALREADY_ADDED')) {
           throw new ConflictException('Friend already added!');
         }
+        
+        // Trigger hibakezelés
+        if (e.message.includes('CANNOT_FRIEND_YOURSELF')) {
+          throw new BadRequestException('You cannot add yourself as a friend!');
+        }
+        
+        throw e; 
       })) as boolean;
 
     if (res) {

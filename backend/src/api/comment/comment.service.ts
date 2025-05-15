@@ -2,7 +2,7 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
 import { AddCommentDto, EditCommentDto } from './dto';
 
@@ -52,6 +52,14 @@ export class CommentService {
       .catch((e: Error) => {
         if (e.message.includes('COMMENTS_POSTS_FK'))
           throw new NotFoundException('Post not found!');
+        
+        // Trigger hibakezelés
+        if (e.message.includes('FORBIDDEN_EXPRESSION') || 
+            e.message.includes('FORBIDDEN_EXPRESSION_IN_COMMENT')) {
+          throw new NotAcceptableException('Obscene expression found in comment!');
+        }
+        
+        throw e; 
       });
   }
 
@@ -68,6 +76,15 @@ export class CommentService {
       .then((res) => {
         if (res.rowsAffected == 1) return { message: 'Comment updated.' };
         throw new NotFoundException('Comment not found!');
+      })
+      .catch((e: Error) => {
+        // Trigger hibakezelés
+        if (e.message.includes('FORBIDDEN_EXPRESSION') || 
+            e.message.includes('FORBIDDEN_EXPRESSION_IN_COMMENT')) {
+          throw new NotAcceptableException('Obscene expression found in comment!');
+        }
+        
+        throw e; 
       });
   }
 

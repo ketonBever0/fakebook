@@ -94,6 +94,12 @@ export class MemberService {
         )
         .then((res) => {
           return res.rowsAffected > 0;
+        })
+        .catch((e: Error) => {
+          if (e.message.includes('CANNOT_REMOVE_GROUP_OWNER')) {
+            throw new ConflictException('Cannot remove the owner of the group!');
+          }
+          throw e;
         });
   }
 }

@@ -2,7 +2,7 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { OracleService } from 'src/oracle/oracle.service';
 import { AddPostDto, UpdatePostDto } from './dto';
 
@@ -51,6 +51,12 @@ export class PostService {
       )
       .then(() => {
         return { message: 'Post added.' };
+      })
+      .catch((e: Error) => {
+        if (e.message.includes('FORBIDDEN_EXPRESSION')) {
+          throw new NotAcceptableException('Obscene expression found in post!');
+        }
+        throw e;
       });
   }
 
@@ -67,6 +73,12 @@ export class PostService {
       .then((res) => {
         if (res.rowsAffected == 1) return { message: 'Post updated.' };
         else throw new NotFoundException('Post not found!');
+      })
+      .catch((e: Error) => {
+        if (e.message.includes('FORBIDDEN_EXPRESSION')) {
+          throw new NotAcceptableException('Obscene expression found in post!');
+        }
+        throw e;
       });
   }
 
