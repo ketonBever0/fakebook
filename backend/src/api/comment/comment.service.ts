@@ -52,7 +52,7 @@ export class CommentService {
       .catch((e: Error) => {
         if (e.message.includes('COMMENTS_POSTS_FK'))
           throw new NotFoundException('Post not found!');
-        
+
         // Trigger hibakezelés
         if (e.message.includes('FORBIDDEN_EXPRESSION') || 
             e.message.includes('FORBIDDEN_EXPRESSION_IN_COMMENT')) {
