@@ -36,7 +36,7 @@ export class AuthService {
         role,
       },
       {
-        expiresIn: '30m',
+        expiresIn: '1h',
         secret: this.config.get('JWT_SECRET'),
       },
     );
