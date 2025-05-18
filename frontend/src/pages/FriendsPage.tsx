@@ -126,7 +126,12 @@ const FriendsPage: React.FC = () => {
                                 <Link to={`/profile/${u.id}`}>{u.fullname}</Link>
                                 <div className="user-actions">
                                     {isFriend && (
-                                        <button className="unfriend-btn" onClick={() => unfriend(u.id)}>Unfriend</button>
+                                        <>
+                                            <button className="unfriend-btn" onClick={() => unfriend(u.id)}>Unfriend</button>
+                                            <Link to={`/chat/${u.id}`}>
+                                                <button className="chat-btn">Chat</button>
+                                            </Link>
+                                        </>
                                     )}
                                     {isIncoming && (
                                         <>
@@ -134,14 +139,11 @@ const FriendsPage: React.FC = () => {
                                             <button className="decline-btn" onClick={() => declineRequest(u.id)}>Decline</button>
                                         </>
                                     )}
-                                    <button className="send-btn" onClick={() => sendRequest(u.id)}>
-                                        Send Request
-                                    </button>
-                                    {/*{!isFriend && !isIncoming && (*/}
-                                    {/*    <button className="send-btn" onClick={() => sendRequest(u.id)} disabled={isSent}>*/}
-                                    {/*        {isSent ? 'Pending' : 'Send Request'}*/}
-                                    {/*    </button>*/}
-                                    {/*)}*/}
+                                    {!isFriend && !isIncoming && (
+                                        <button className="send-btn" onClick={() => sendRequest(u.id)} disabled={isSent}>
+                                            {isSent ? 'Pending' : 'Send Request'}
+                                        </button>
+                                    )}
                                 </div>
                             </li>
                         );

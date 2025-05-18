@@ -18,6 +18,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import GroupsPage from './pages/GroupsPage';
 import FriendsPage from './pages/FriendsPage';
+import ChatPage from './pages/ChatPage';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/my-groups" element={<GroupsPage />} />
             <Route path="/my-friends" element={<FriendsPage />} />
+            <Route path="/chat/:id" element={<ChatPage />} />
           </Routes>
         </Router>
       </div>
