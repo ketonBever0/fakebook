@@ -50,7 +50,7 @@ export class PostService {
         this.db.autoCommit,
       )
       .then(() => {
-        return { message: 'Post added.' };
+        return { message: 'Post added.', ...dto };
       })
       .catch((e: Error) => {
         if (e.message.includes('FORBIDDEN_EXPRESSION')) {
