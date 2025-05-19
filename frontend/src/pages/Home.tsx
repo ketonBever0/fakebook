@@ -17,7 +17,7 @@ const Home = () => {
           Csatlakozz hozzánk és fedezd fel a lehetőségeket! Oszd meg gondolataidat,
           kapcsolódj barátokhoz, élvezd a közösségi élményt.
         </p>
-        <Link to="/login" className="cta-button">
+        <Link to="/LoginPage" className="cta-button">
           Jelentkezz be a folytatáshoz
         </Link>
       </div>
