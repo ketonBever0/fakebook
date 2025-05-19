@@ -38,7 +38,7 @@ const ProfilePage = () => {
     const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
     const [newCommentText, setNewCommentText] = useState<{ [key: number]: string }>({});
     const [newPostText, setNewPostText] = useState<string>("");
-    const [newPostImageUrl, setNewPostImageUrl] = useState<string>("");
+    const [newPostImage, setNewPostImage] = useState<File | null>(null);
     const [error, setError] = useState<string>("");
     const [allInterests, setAllInterests] = useState<{ id: number; name: string }[]>([]);
     const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
@@ -131,18 +131,25 @@ const ProfilePage = () => {
 
     const handleNewPostSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!loggedInUser || loggedInUser.id !== parseInt(userId)) return; // Ensure only logged-in user can post
+        if (!loggedInUser || loggedInUser.id !== parseInt(userId)) return;
 
         try {
-            await axios.post("http://localhost:3000/api/post", {
-                text: newPostText,
-                imageUrl: newPostImageUrl,
-                authorId: loggedInUser.id
+            const formData = new FormData();
+            formData.append("text", newPostText);
+            formData.append("authorId", loggedInUser.id.toString());
+            if (newPostImage) {
+                formData.append("image", newPostImage);
+            }
+
+            const response = await axios.post("http://localhost:3000/api/post", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
-            setPosts([{ id: Date.now(), text: newPostText, imageUrl: newPostImageUrl, authorId: loggedInUser.id }, ...posts]);
+            const createdPost = response.data; // assuming backend returns the created post
+            setPosts([createdPost, ...posts]);
+
             setNewPostText("");
-            setNewPostImageUrl("");
+            setNewPostImage(null);
         } catch (error: any) {
             const message = error.response?.data?.message;
 
@@ -155,6 +162,7 @@ const ProfilePage = () => {
             console.error("Post creation failed:", error);
         }
     };
+
 
     const handleNewCommentSubmit = async (postId: number) => {
         if (!loggedInUser || !newCommentText[postId]) return; // Ensure comments come from logged-in user
@@ -232,10 +240,20 @@ const ProfilePage = () => {
                     <>
                         <h2 className="profile-posts-title">Új bejegyzés létrehozása</h2>
                         <form className="new-post-form" onSubmit={handleNewPostSubmit}>
-                            <textarea placeholder="Írd meg a bejegyzésed..." value={newPostText} onChange={(e) => setNewPostText(e.target.value)} required />
-                            <input type="text" placeholder="Kép URL (opcionális)" value={newPostImageUrl} onChange={(e) => setNewPostImageUrl(e.target.value)} />
+                            <textarea
+                                placeholder="Írd meg a bejegyzésed..."
+                                value={newPostText}
+                                onChange={(e) => setNewPostText(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setNewPostImage(e.target.files?.[0] || null)}
+                            />
                             <button type="submit" className="profile-button">Bejegyzés létrehozása</button>
                         </form>
+
                     </>
                 )}
 
@@ -244,10 +262,16 @@ const ProfilePage = () => {
                     {posts.map(post => (
                         <div key={post.id} className="post">
                             <p>{post.text}</p>
-                            {post.imageUrl && <img src={post.imageUrl} alt="Post" />}
+                            {post.imageUrl && (
+                                <img
+                                    src={`http://localhost:3000/api/post/image/${post.imageUrl}`}
+                                    alt="Post"
+                                    className="post-image"
+                                />
+                            )}
 
                             <div className="comment-form">
-                                <input type="text" placeholder="Írd meg hozzászólásod..." value={newCommentText[post.id] || ""}
+                            <input type="text" placeholder="Írd meg hozzászólásod..." value={newCommentText[post.id] || ""}
                                        onChange={(e) => setNewCommentText({ ...newCommentText, [post.id]: e.target.value })} />
                                 <button onClick={() => handleNewCommentSubmit(post.id)}>Hozzászólás</button>
                             </div>
