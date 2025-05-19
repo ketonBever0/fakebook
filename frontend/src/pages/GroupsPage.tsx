@@ -157,7 +157,7 @@ const GroupListPage: React.FC = () => {
                 <ul className="group-list">
                     {groups.map((group) => (
                         <li key={group.id} className="group-item">
-                            <a href={`/group/${group.id}`} className="group-link">{group.name}</a>
+                            <h2 className="group-link">{group.name}</h2>
                             <span>{group.private ? "Private" : "Public"} - {group.memberCount} members</span>
                             <div>
                                 {memberships[group.id]?.role === "NOT_MEMBER" ? (

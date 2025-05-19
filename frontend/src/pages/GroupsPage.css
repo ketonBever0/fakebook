@@ -72,12 +72,8 @@
 .group-link {
     text-decoration: none;
     font-weight: bold;
-    color: var(--accent-color);
+    color: var(--smoky-black);
     transition: var(--transition-normal);
-}
-
-.group-link:hover {
-    color: var(--accent-color-hover);
 }
 
 .error {
@@ -174,11 +170,21 @@
 
     .groups-header h2 {
         font-size: var(--font-size-xl);
+        color: var(--smoky-black);
     }
 
     .group-item {
         font-size: var(--font-size-md);
         padding: var(--spacing-md);
     }
+}
+
+.groups-header h2 {
+    font-size: var(--font-size-xl);
+    color: var(--smoky-black);
+}
+
+.group-item  span{
+    color: var(--smoky-black);
 }
 
