@@ -1,3 +1,5 @@
+@import '../styles/main.css';
+
 /* FriendsPage.css */
 :root {
     --yinmn-blue: #304d6dff;
@@ -10,8 +12,8 @@
 /* General container style */
 .profile-container{
     max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-md);
     background-color: var(--papaya-whip);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -30,9 +32,9 @@
 /* Headers */
 .profile-header h1,
 .friends-container h2 {
-    font-size: 2rem;
+    font-size: var(--font-size-xxl);
     color: var(--smoky-black);
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-md);
     text-align: center;
 }
 
@@ -40,63 +42,63 @@
 .profile-details {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 30px;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
 }
 .profile-details p {
     color: rgba(16, 12, 11, 0.75);
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
 }
 
 /* Posts grid for profile */
 .profile-posts {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
 }
 
 .post {
     background-color: rgba(48, 77, 109, 0.85);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
     color: var(--papaya-whip);
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
 }
 .post:hover {
     transform: translateY(-5px);
 }
 .post img {
     max-width: 100%;
-    border-radius: 8px;
-    margin-top: 10px;
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-sm);
 }
 .post-date {
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     color: rgba(253, 240, 213, 0.7);
-    margin-top: 8px;
+    margin-top: var(--spacing-sm);
 }
 
 /* Comments inside posts */
 .post-comments {
-    margin-top: 15px;
-    padding: 10px;
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
     background-color: rgba(48, 77, 109, 0.75);
-    border-radius: 8px;
+    border-radius: var(--border-radius-sm);
 }
 .post-comments h3 {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
 }
 .comment {
-    font-size: 1rem;
-    margin-bottom: 6px;
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-xs);
 }
 .comment-date {
-    font-size: 0.75rem;
+    font-size: var(--font-size-sm);
     color: rgba(253, 240, 213, 0.6);
-    margin-left: 8px;
+    margin-left: var(--spacing-sm);
 }
 
 /* New post and comment forms */
@@ -104,17 +106,17 @@
 .comment-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
 }
 .new-post-form input,
 .new-post-form textarea,
 .comment-form input {
     background-color: rgba(48, 77, 109, 0.15);
     border: 1px solid rgba(253, 240, 213, 0.2);
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 1rem;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-md);
 }
 .new-post-form input:focus,
 .new-post-form textarea:focus,
@@ -148,15 +150,15 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--spacing-sm);
 }
 .user-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
+    padding: var(--spacing-sm) var(--spacing-md);
     background-color: #fff;
-    border-radius: 8px;
+    border-radius: var(--border-radius-sm);
 }
 .user-item a {
     font-weight: 500;
@@ -167,13 +169,13 @@
     color: var(--yinmn-blue);
 }
 .user-item button {
-    padding: 8px 14px;
+    padding: var(--spacing-sm) var(--spacing-md);
     border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
 }
 .user-item button:hover:not(:disabled) {
     opacity: 0.9;
@@ -196,8 +198,8 @@
 @media (max-width: 768px) {
     .profile-container,
     .friends-container {
-        margin: 20px;
-        padding: 16px;
+        margin: var(--spacing-md);
+        padding: var(--spacing-md);
     }
     .profile-posts {
         grid-template-columns: 1fr;
@@ -205,7 +207,7 @@
     .user-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--spacing-sm);
     }
     .user-item button {
         width: 100%;
@@ -216,5 +218,5 @@
     text-decoration: none;
     font-weight: bold;
     color: #ffd700;
-    transition: color 0.3s ease;
+    transition: color var(--transition-normal);
 }

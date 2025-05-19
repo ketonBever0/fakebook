@@ -1,44 +1,55 @@
+@import '../styles/main.css';
+
 .container {
     width: 80%;
     margin: 0 auto;
+    padding: var(--spacing-lg);
 }
 
 /* Heading styles */
 h1 {
-    color: #304d6d;
+    color: var(--yinmn-blue);
     text-align: center;
-    margin-top: 20px;
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-size-2xl);
 }
 
 h2 {
-    color: #08bdbd;
-    margin-top: 20px;
+    color: var(--verdigris);
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-size-xl);
 }
 
 /* Table styles */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: #fdf0d5;
-    border-radius: 12px;
+    margin-bottom: var(--spacing-lg);
+    background-color: var(--papaya-whip);
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
+    box-shadow: var(--shadow-md);
 }
 
 thead {
-    background-color: #304d6d;
-    color: #fdf0d5;
+    background-color: var(--yinmn-blue);
+    color: var(--papaya-whip);
 }
 
 th, td {
-    padding: 10px;
-    border: 1px solid #100c0b;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
     text-align: left;
 }
 
 tbody tr {
-    background-color: #08bdbd;
-    color: #100c0b;
+    background-color: var(--background-light);
+    color: var(--text-primary);
+    transition: var(--transition-normal);
+}
+
+tbody tr:hover {
+    background-color: var(--background-hover);
 }
 
 .form-container {
@@ -47,69 +58,107 @@ tbody tr {
     align-items: flex-start;
     width: 50%;
     margin: 0 auto;
+    padding: var(--spacing-lg);
+    background-color: var(--papaya-whip);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
-input.new-user {
-    width: 80%;
-    padding: 10px;
-    background-color: #fff5e8;
-    border: 1px solid #08bdbd;
-    border-radius: 12px;
-    margin-bottom: 15px;
-}
+input.new-user,
 textarea.new-user {
     width: 80%;
-    padding: 10px;
-    background-color: #fff5e8;
-    border: 1px solid #08bdbd;
-    border-radius: 12px;
-    margin-bottom: 15px;
+    padding: var(--spacing-md);
+    background-color: var(--background-light);
+    border: 1px solid var(--verdigris);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-md);
+    transition: var(--transition-normal);
 }
 
+input.new-user:focus,
+textarea.new-user:focus {
+    outline: none;
+    border-color: var(--yinmn-blue);
+    box-shadow: var(--shadow-sm);
+}
 
 /* Edit user input styles */
 input.edit-user {
     width: 90%;
-    padding: 10px;
-    background-color: #fff5e8;
-    border: 1px solid #08bdbd;
-    border-radius: 12px;
+    padding: var(--spacing-md);
+    background-color: var(--background-light);
+    border: 1px solid var(--verdigris);
+    border-radius: var(--border-radius-md);
     margin: 0 auto;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-sm);
+    transition: var(--transition-normal);
+}
+
+input.edit-user:focus {
+    outline: none;
+    border-color: var(--yinmn-blue);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Button styles */
 button {
-    padding: 10px 15px;
+    padding: var(--spacing-sm) var(--spacing-md);
     border: none;
     cursor: pointer;
-    border-radius: 12px;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-button.edit {
-    background-color: #08bdbd;
-    color: #100c0b;
-}
-
-button.delete {
-    background-color: #da3e52;
-    color: #fdf0d5;
-}
-
-button.save {
-    background-color: #da3e52;
-    color: #fdf0d5;
-    margin-right: 5px;
-}
-
-button.cancel {
-    background-color: #304d6d;
-    color: #fdf0d5;
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-normal);
+    font-weight: 600;
 }
 
 button:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+button.edit {
+    background-color: var(--verdigris);
+    color: var(--text-primary);
+}
+
+button.delete {
+    background-color: var(--amaranth);
+    color: var(--papaya-whip);
+}
+
+button.save {
+    background-color: var(--amaranth);
+    color: var(--papaya-whip);
+    margin-right: var(--spacing-sm);
+}
+
+button.cancel {
+    background-color: var(--yinmn-blue);
+    color: var(--papaya-whip);
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: var(--spacing-md);
+    }
+
+    .form-container {
+        width: 90%;
+    }
+
+    input.new-user,
+    textarea.new-user,
+    input.edit-user {
+        width: 100%;
+    }
+
+    table {
+        font-size: var(--font-size-sm);
+    }
+
+    th, td {
+        padding: var(--spacing-sm);
+    }
 }
 
 body {
