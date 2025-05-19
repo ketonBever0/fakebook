@@ -8,7 +8,6 @@ export class AddPostDto {
   imageUrl: string;
 
   @IsNotEmpty()
-  @IsInt()
   authorId: number;
 }
 

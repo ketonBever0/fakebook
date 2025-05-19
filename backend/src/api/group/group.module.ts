@@ -14,5 +14,6 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [AuthModule, OracleModule, JwtModule],
   controllers: [GroupController],
   providers: [GroupService, MemberService],
+  exports: [GroupService]
 })
 export class GroupModule {}

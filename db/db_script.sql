@@ -6,7 +6,7 @@
 -- Az ID- és bizonyos dátum mezők szándékosan vannak kihagyva demonstrálva a szekvenciák és a SYSDATE megfelelő működését
 
 
--- DROP USER FAKEBOOK CASCADE;
+DROP USER FAKEBOOK CASCADE;
 -- ^ Ha újra akarod generálni a sémát vedd ki a kommentet a fenti sorból,
 -- DE előtte állítsd le a backendet
 
@@ -362,6 +362,68 @@ VALUES (4, 'Just finished a great book!', 'http://example.com/image4.jpg', 4);
 INSERT INTO FAKEBOOK.POSTS (ID, TEXT, IMAGE_URL, AUTHOR_ID)
 VALUES (5, 'Started learning a new programming language!', NULL, 5);
 
+
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (6, 'Another busy day at work!', 'http://example.com/image6.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (7, 'Just completed a marathon! #achievement', 'http://example.com/image7.jpg', 4);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (8, 'Enjoying some family time today.', 'http://example.com/image8.jpg', 5);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (9, 'Just got back from a vacation!', 'http://example.com/image9.jpg', 1);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (10, 'Learning a new programming language today!', 'http://example.com/image10.jpg', 1);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (11, 'Had a wonderful dinner with family.', 'http://example.com/image11.jpg', 1);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (12, 'Hiking in the mountains today!', 'http://example.com/image12.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (13, 'Caught up with an old friend!', 'http://example.com/image13.jpg', 3);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (14, 'Just launched a new project at work!', 'http://example.com/image14.jpg', 4);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (15, 'Celebrating a milestone today!', 'http://example.com/image15.jpg', 5);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (16, 'Grateful for everything I have.', 'http://example.com/image16.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (17, 'Working on a new blog post!', 'http://example.com/image17.jpg', 4);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (18, 'Loving the new book I started!', 'http://example.com/image18.jpg', 1);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (19, 'Check out this cool new app I discovered!', 'http://example.com/image19.jpg', 3);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (20, 'Great to be back after a short break.', 'http://example.com/image20.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (21, 'Can’t wait for the concert this weekend!', 'http://example.com/image21.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (22, 'Had an amazing day at the beach.', 'http://example.com/image22.jpg', 2);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (23, 'Just started a new fitness routine!', 'http://example.com/image23.jpg', 1);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (24, 'Looking forward to the holiday season!', 'http://example.com/image24.jpg', 5);
+
+INSERT INTO "FAKEBOOK"."POSTS" ("ID", "TEXT", "IMAGE_URL", "AUTHOR_ID") 
+VALUES (25, 'Enjoying a quiet day at home.', 'http://example.com/image25.jpg', 4);
+
 -- COMMENTS
 INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
 VALUES ('Great post!', 2, 1);
@@ -377,6 +439,59 @@ VALUES ('I also loved that book!', 4, 4);
 
 INSERT INTO FAKEBOOK.COMMENTS (TEXT, AUTHOR_ID, POST_ID)
 VALUES ('Good luck with your coding journey!', 5, 5);
+
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (1, 'Great post, keep it up!', 2, 1);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (2, 'Looks like you had a great time!', 3, 2);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (3, 'Congrats on completing the marathon!', 4, 7);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (4, 'Enjoy your family time!', 5, 8);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (5, 'I love hiking too! Where did you go?', 2, 12);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (6, 'The dinner must have been great!', 1, 11);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (7, 'What project are you working on?', 4, 14);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (8, 'Congratulations on your milestone!', 5, 15);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (9, 'That book sounds interesting!', 1, 18);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (10, 'I want to try that app too!', 1, 19);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (11, 'It’s good to take breaks sometimes.', 2, 20);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (12, 'Have fun at the concert!', 5, 21);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (13, 'The beach is always a good choice!', 4, 22);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (14, 'I hope your fitness routine goes well!', 5, 23);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (15, 'Enjoy the holiday season!', 1, 24);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (16, 'Stay cozy on your quiet day!', 5, 25);
+
+INSERT INTO "FAKEBOOK"."COMMENTS" ("ID", "TEXT", "AUTHOR_ID", "POST_ID") 
+VALUES (17, 'I love your positive vibes!', 1, 4);
+
 
 -- FRIENDS
 INSERT INTO FAKEBOOK.FRIENDS (PENDING, SENDER_ID, RECEIVER_ID)
@@ -435,25 +550,136 @@ VALUES (4,'Travel');
 INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
 VALUES (5,'Cooking');
 
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (6,'Gaming');
+
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (7,'Driving');
+
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (8,'Cycling');
+
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (9,'Gym');
+
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (10,'Coding');
+
+INSERT INTO FAKEBOOK.INTERESTS (ID, NAME)
+VALUES (11,'Business');
+
+
 -- MESSAGES
-INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
-VALUES ('Hey, how are you?', 1, 2);
+INSERT INTO FAKEBOOK.MESSAGES (ID, TEXT, SENDER_ID, RECEIVER_ID)
+VALUES (1, 'Hey, how are you?', 1, 2);
 
-INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
-VALUES ('I''m doing well, thanks!', 2, 1);
+INSERT INTO FAKEBOOK.MESSAGES (ID, TEXT, SENDER_ID, RECEIVER_ID)
+VALUES (2, 'I''m doing well, thanks!', 2, 1);
 
-INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
-VALUES ('What time is our meeting tomorrow?', 3, 4);
+INSERT INTO FAKEBOOK.MESSAGES (ID, TEXT, SENDER_ID, RECEIVER_ID)
+VALUES (3, 'What time is our meeting tomorrow?', 3, 4);
 
-INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
-VALUES ('I finished the project! Check it out!', 4, 5);
+INSERT INTO FAKEBOOK.MESSAGES (ID, TEXT, SENDER_ID, RECEIVER_ID)
+VALUES (4, 'I finished the project! Check it out!', 4, 5);
 
-INSERT INTO FAKEBOOK.MESSAGES (TEXT, SENDER_ID, RECEIVER_ID)
-VALUES ('Can''t wait for our vacation together!', 5, 1);
+INSERT INTO FAKEBOOK.MESSAGES (ID, TEXT, SENDER_ID, RECEIVER_ID)
+VALUES (5, 'Can''t wait for our vacation together!', 5, 1);
+
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (6, 'Yes, I went there last week! It was amazing.', SYSDATE, 4, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (7, 'We should go together sometime.', SYSDATE, 4, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (8, 'Sounds like a plan!', SYSDATE, 2, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (9, 'I found a great spot for a weekend hike!', SYSDATE, 1, 5);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (10, 'Awesome! Let me know when you’re free.', SYSDATE, 5, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (11, 'Do you want to join me for a movie tonight?', SYSDATE, 3, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (12, 'Sure, that sounds fun!', SYSDATE, 4, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (13, 'I’m planning a weekend getaway, want to join?', SYSDATE, 2, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (14, 'That sounds exciting! Let me think about it.', SYSDATE, 1, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (15, 'Looking forward to it!', SYSDATE, 1, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (16, 'Me too! Let’s make it happen soon.', SYSDATE, 4, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (17, 'Are you up for a game night?', SYSDATE, 3, 5);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (18, 'Absolutely, I love game nights!', SYSDATE, 5, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (19, 'Let’s meet up for coffee later.', SYSDATE, 2, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (20, 'I’ll be there in an hour!', SYSDATE, 3, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (21, 'Hey, did you finish the project we discussed?', SYSDATE, 4, 5);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (22, 'Yes, I just wrapped it up!', SYSDATE, 5, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (23, 'Great job! Let’s review it tomorrow.', SYSDATE, 4, 5);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (24, 'Sure, I’ll be ready.', SYSDATE, 5, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (25, 'How was your weekend getaway?', SYSDATE, 2, 4);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (26, 'It was amazing! We should plan another trip together.', SYSDATE, 4, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (27, 'What time works for you to meet this week?', SYSDATE, 3, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (28, 'I’m free on Friday, let’s do it then.', SYSDATE, 1, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (29, 'I need help with a task, are you available?', SYSDATE, 5, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (30, 'Of course, let me know what you need.', SYSDATE, 3, 5);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (31, 'Hey, how are you doing?', SYSDATE, 1, 2);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (32, 'I am doing great, thanks for asking!', SYSDATE, 2, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (33, 'Let’s catch up soon!', SYSDATE, 1, 3);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (34, 'Sure, I would love to!', SYSDATE, 3, 1);
+
+INSERT INTO "FAKEBOOK"."MESSAGES" ("ID", "TEXT", "WHEN", "SENDER_ID", "RECEIVER_ID") 
+VALUES (35, 'Have you checked out the new restaurant?', SYSDATE, 2, 4);
+
+
+
 
 -- USER_GROUPS
-
--- USER_INTERESTS
 INSERT INTO FAKEBOOK.USER_GROUPS (ID,"ROLE",USER_ID,GROUP_ID) VALUES ('36','PENDING',1,28);
 
 INSERT INTO FAKEBOOK.USER_GROUPS (ID,"ROLE",USER_ID,GROUP_ID) VALUES ('17','OWNER',2,28);

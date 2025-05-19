@@ -40,13 +40,14 @@ export class PostService {
     return result;
   }
 
-  async addPost(dto: AddPostDto) {
+
+  async addPost(dto: AddPostDto, imgName: string) {
     return await this.db.pool
       .execute(
         `
       INSERT INTO POSTS (TEXT, IMAGE_URL, AUTHOR_ID) VALUES (:text, :imageUrl, :authorId)
       `,
-        { text: dto.text, imageUrl: dto.imageUrl, authorId: dto.authorId },
+        { text: dto.text, imageUrl: imgName, authorId: dto.authorId },
         this.db.autoCommit,
       )
       .then(() => {
