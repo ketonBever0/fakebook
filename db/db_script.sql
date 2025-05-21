@@ -6,7 +6,7 @@
 -- Az ID- és bizonyos dátum mezők szándékosan vannak kihagyva demonstrálva a szekvenciák és a SYSDATE megfelelő működését
 
 
-DROP USER FAKEBOOK CASCADE;
+-- DROP USER FAKEBOOK CASCADE;
 -- ^ Ha újra akarod generálni a sémát vedd ki a kommentet a fenti sorból,
 -- DE előtte állítsd le a backendet
 

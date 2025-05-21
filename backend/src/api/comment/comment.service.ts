@@ -27,9 +27,10 @@ export class CommentService {
     return await this.db.pool
       .execute(
         `
-      SELECT ID AS "id", TEXT AS "text", AUTHOR_ID AS "authorId", POST_ID AS "postId"
-      FROM COMMENTS
-      WHERE POST_ID = :id
+      SELECT C.ID AS "id", C.TEXT AS "text", C.POST_ID AS "postId", C.AUTHOR_ID AS "authorId", U.FULLNAME AS "authorName"
+      FROM FAKEBOOK.COMMENTS C
+      LEFT JOIN FAKEBOOK.USERS U ON C.AUTHOR_ID = U.ID
+      WHERE C.POST_ID = :id
       `,
         { id: postId },
         this.db.jsonFormat,
