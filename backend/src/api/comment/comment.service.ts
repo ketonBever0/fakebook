@@ -54,7 +54,7 @@ export class CommentService {
         if (e.message.includes('COMMENTS_POSTS_FK'))
           throw new NotFoundException('Post not found!');
 
-        // Trigger hibakezelés
+        
         if (e.message.includes('FORBIDDEN_EXPRESSION') || 
             e.message.includes('FORBIDDEN_EXPRESSION_IN_COMMENT')) {
           throw new NotAcceptableException('Obscene expression found in comment!');
@@ -79,7 +79,7 @@ export class CommentService {
         throw new NotFoundException('Comment not found!');
       })
       .catch((e: Error) => {
-        // Trigger hibakezelés
+        
         if (e.message.includes('FORBIDDEN_EXPRESSION') || 
             e.message.includes('FORBIDDEN_EXPRESSION_IN_COMMENT')) {
           throw new NotAcceptableException('Obscene expression found in comment!');
